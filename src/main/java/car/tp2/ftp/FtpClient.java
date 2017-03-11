@@ -217,4 +217,8 @@ public class FtpClient {
 			throw new FtpException("Echec du renommage");
 	}
 
+	public void close() throws IOException {
+		this.commandSocket.close();
+	}
+
 }

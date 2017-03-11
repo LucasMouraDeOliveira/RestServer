@@ -45,6 +45,7 @@ public class FtpFolderResource {
 				html+="</br><li><a href='/rest/tp2/folder/"+path+"/..'> retour</a></li>";
 			}
 			html+="</ul></body></html>";
+			client.close();
 			return Response.ok(html).build();
 		} catch (FtpException | IOException e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();

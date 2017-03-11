@@ -6,12 +6,14 @@ import java.io.InputStream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -34,6 +36,7 @@ public class FtpFileResource {
 			FtpClient client = new FtpClient();
 			File file = null;
 			file = client.download(path);
+			client.close();
 			if(file == null){
 				return Response.status(Response.Status.NOT_FOUND).build();
 			} else {
@@ -62,6 +65,7 @@ public class FtpFileResource {
 				client.connect("lucas", "l");
 				client.setPassive();
 				client.upload(inputStream, fileName);
+				client.close();
 			} catch (IOException | FtpException e) {
 				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 			}
@@ -70,12 +74,13 @@ public class FtpFileResource {
 	}
 	
 	@PUT
-	@Path("/rename/{to : [^/]*}/{from : .*}")
-	public Response renameFile(@PathParam("to") String to,@PathParam("from") String from){
+	@Path("/rename")
+	public Response renameFile(@QueryParam("from") String from,@QueryParam("to") String to){
 		FtpClient client;
 		try {
 			client = new FtpClient();
 			client.rename(from,to);
+			client.close();
 			return Response.ok().build();
 		} catch (IOException | FtpException e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
@@ -89,6 +94,7 @@ public class FtpFileResource {
 		try {
 			FtpClient client = new FtpClient();
 			client.delete(path);
+			client.close();
 			return Response.ok().build();
 		} catch (FtpException | IOException e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();

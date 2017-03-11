@@ -91,5 +91,9 @@ public class FtpFactory {
 	public FtpRequest buildStorRequest(String fileName) {
 		return new FtpRequest("STOR " + fileName);
 	}
+	
+	public FtpRequest buildMkdirRequest(String fileName) {
+		return new FtpRequest("MKDIR " + fileName);
+	}
 
 }

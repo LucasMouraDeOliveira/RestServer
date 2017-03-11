@@ -33,6 +33,10 @@ public abstract class FtpSocket {
 	
 	public abstract String readLine() throws IOException;
 	
+	public void close() throws IOException{
+		this.socket.close();
+	}
+	
 //	public FtpReply sendAndWaitForReply(FtpRequest request) throws FtpException {
 //		this.writeLineInWriter(request.getText());
 //		return this.ftpFactory.buildResponse(readLineInReader());
