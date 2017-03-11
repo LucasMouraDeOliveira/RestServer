@@ -226,7 +226,17 @@ public class FtpClient {
 			throw new FtpException("Echec du renommage");
 	}
 
+	public void mkdir(String path) throws FtpException {
+		if(!this.isConnected())
+			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
+		//Envoi de la commande RNFR
+		FtpReply reply = this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildMkdCommand(path));
+		if(!reply.isOk("200"))
+			throw new FtpException("Echec de la creation");
+	}
+
 	public void close() throws IOException {
+		this.commandSocket.send(this.ftpFactory.buildQuitCommand());
 		this.commandSocket.close();
 	}
 
