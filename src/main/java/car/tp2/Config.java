@@ -18,6 +18,7 @@ import org.springframework.context.annotation.DependsOn;
 
 import car.tp2.resources.FtpFileResource;
 import car.tp2.resources.FtpFolderResource;
+import car.tp2.resources.FtpJsRessource;
 
 /**
  * Configuration de l'application.
@@ -36,6 +37,8 @@ public class Config {
 		resources.add(new HelloWorldResource());
 		resources.add(new FtpFileResource());
 		resources.add(new FtpFolderResource());
+		resources.add(new FtpJsRessource());
+
 	}
 	
 	/**
