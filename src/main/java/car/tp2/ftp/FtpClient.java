@@ -2,6 +2,7 @@ package car.tp2.ftp;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,13 +99,30 @@ public class FtpClient {
 			dataSocket.openSocket("localhost", this.dataPort);
 			//Reception des données sur la socket de données
 			file = dataSocket.readDataInReader(path.replace("/", "_"));
-			//Ecriture dans un fichier temporaire
-			//Renvoi du fichier temporaire
+			dataSocket.closeReaders();
 		} catch (IOException e) {
 			throw new FtpException("Erreur interne");
 		}
 		
 		return file;
+	}
+	
+	public void upload(InputStream inputStream, String fileName) throws FtpException{
+		if(!this.isConnected()) {
+			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
+		}
+		if(this.getDataPort() == 0){
+			throw new FtpException("Le mode passif n'est pas actif");
+		}
+		this.commandSocket.send(this.ftpFactory.buildStorRequest(fileName));
+		try {
+			FtpDataSocket dataSocket = new FtpDataSocket(this.ftpFactory);
+			dataSocket.openSocket("localhost", this.dataPort);
+			dataSocket.writeDataInWriter(inputStream);
+			dataSocket.closeReaders();
+		} catch (IOException e) {
+			throw new FtpException("Erreur interne");
+		}
 	}
 	
 	public List<String> list(String path) throws FtpException {

@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 
 import car.tp2.ftp.FtpException;
@@ -13,6 +14,8 @@ import car.tp2.ftp.FtpFactory;
 public class FtpDataSocket extends FtpSocket {
 	
 	protected DataInputStream reader;
+	
+	protected DataOutputStream writer;
 
 	public FtpDataSocket(FtpFactory ftpFactory) throws IOException {
 		super(ftpFactory);
@@ -21,11 +24,13 @@ public class FtpDataSocket extends FtpSocket {
 	@Override
 	public void openReaders() throws IOException {
 		this.reader = this.ftpFactory.buildDataSocketReader(this.socket);
+		this.writer = this.ftpFactory.buildDataSocketWriter(this.socket);
 	}
 	
 	@Override
 	public void closeReaders() throws IOException {
 		this.reader.close();
+		this.writer.close();
 	}
 	
 	@Override
@@ -71,5 +76,21 @@ public class FtpDataSocket extends FtpSocket {
 			return data;
 		else
 			return Arrays.copyOf(data, numread);
+	}
+
+	public void writeDataInWriter(InputStream inputStream) throws FtpException{
+		DataInputStream inputStreamReader = new DataInputStream(inputStream);
+		try {
+			byte[] data;
+			while ((data = readDataByte(inputStreamReader)) != null) {
+				this.writer.write(data);
+			}
+		} catch (IOException e) {
+			throw new FtpException("Erreur d'écriture");
+		} finally {
+			try {
+				inputStreamReader.close();
+			} catch (IOException e) { /*pas trop grave */}
+		}
 	}
 }

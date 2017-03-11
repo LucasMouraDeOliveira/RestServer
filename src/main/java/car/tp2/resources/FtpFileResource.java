@@ -58,8 +58,14 @@ public class FtpFileResource {
 			try {
 				InputStream inputStream = attachment.getDataHandler().getInputStream();
 				String fileName = attachment.getDataHandler().getName();
-				
-			} catch (IOException e) {
+				FtpFactory ftpFactory = new FtpFactory();
+				FtpCommandSocket commandSocket = new FtpCommandSocket(ftpFactory);
+				FtpClient client = new FtpClient(commandSocket, ftpFactory);
+				client.openSocket("localhost", 2021);
+				client.connect("lucas", "l");
+				client.setPassive();
+				client.upload(inputStream, fileName);
+			} catch (IOException | FtpException e) {
 				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 			}
 		}

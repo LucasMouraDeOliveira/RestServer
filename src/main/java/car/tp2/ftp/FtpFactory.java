@@ -76,4 +76,8 @@ public class FtpFactory {
 		return new FtpRequest("CWD " + path);
 	}
 
+	public FtpRequest buildStorRequest(String fileName) {
+		return new FtpRequest("STOR " + fileName);
+	}
+
 }
