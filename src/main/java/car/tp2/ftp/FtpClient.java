@@ -8,39 +8,40 @@ import java.util.List;
 
 import car.tp2.ftp.socket.FtpCommandSocket;
 import car.tp2.ftp.socket.FtpDataSocket;
+import car.tp2.utility.FtpConfig;
 
 public class FtpClient {
 	
 	protected FtpCommandSocket commandSocket;
 	
 	protected boolean open, connected;
-	
-	protected int commandPort, dataPort;
 
 	protected FtpFactory ftpFactory;
+	
+	protected FtpConfig ftpConfig;
 
-	public FtpClient(FtpCommandSocket commandSocket, FtpFactory ftpFactory) {
+	public FtpClient(FtpCommandSocket commandSocket, FtpFactory ftpFactory, FtpConfig ftpConfig) {
 		this.commandSocket = commandSocket;
 		this.ftpFactory = ftpFactory;
-		this.commandPort = 0;
+		this.ftpConfig = ftpConfig;
 	}
 	
 	public FtpClient() throws IOException, FtpException{
 		this.ftpFactory = new FtpFactory();
 		this.commandSocket = new FtpCommandSocket(ftpFactory);
-		this.openSocket("localhost", 2021);
+		this.ftpConfig = new FtpConfig();
+		this.openSocket(this.ftpConfig.getCommandAddress(), this.ftpConfig.getCommandPort());
 		this.connect("lucas", "l");
 		this.setPassive();
 	}
 
-	public void openSocket(String commandAddress, int commandPort) throws FtpException {
-		if(this.commandSocket.openSocket(commandAddress, commandPort)){
+	public void openSocket(String address, int port) throws FtpException {
+		if(this.commandSocket.openSocket(address, port)){
 			//Lecture de la première ligne (message de bienvenue)
 			try {
 				String reply = this.commandSocket.readLine();
 				if(reply != null && reply.startsWith("220")){
 					this.open = true;
-					this.commandPort = commandPort;
 				}
 			} catch (IOException e) {
 				throw new FtpException("Erreur lors de la lecture du message de bienvenue");
@@ -54,10 +55,6 @@ public class FtpClient {
 	
 	public boolean isConnected() {
 		return this.open && this.connected;
-	}
-
-	public int getCommandPort() {
-		return this.commandPort;
 	}
 	
 	/**
@@ -104,7 +101,7 @@ public class FtpClient {
 			this.commandSocket.send(this.ftpFactory.buildRetrCommand(path));
 			//Connexion de la socket
 			FtpDataSocket dataSocket = new FtpDataSocket(this.ftpFactory);
-			dataSocket.openSocket("localhost", this.dataPort);
+			dataSocket.openSocket(this.ftpConfig.getCommandAddress(), this.ftpConfig.getDataPort());
 			//Reception des données sur la socket de données
 			file = dataSocket.readDataInReader(path.replace("/", "_"));
 			dataSocket.closeReaders();
@@ -128,7 +125,7 @@ public class FtpClient {
 			if(reply.isOk("150")){
 				try {
 					FtpDataSocket dataSocket = new FtpDataSocket(this.ftpFactory);
-					dataSocket.openSocket("localhost", this.dataPort);
+					dataSocket.openSocket(this.ftpConfig.getCommandAddress(), this.ftpConfig.getDataPort());
 					dataSocket.writeDataInWriter(inputStream);
 					dataSocket.closeReaders();
 				} catch (IOException e) {
@@ -155,7 +152,7 @@ public class FtpClient {
 				this.commandSocket.send(this.ftpFactory.buildListRequest(path));
 				List<String> files = new ArrayList<String>();
 				FtpDataSocket dataSocket = new FtpDataSocket(this.ftpFactory);
-				dataSocket.openSocket("localhost", this.dataPort);
+				dataSocket.openSocket(this.ftpConfig.getCommandAddress(), this.ftpConfig.getDataPort());
 				String line = null;
 				while((line = dataSocket.readLine()) != null){
 					files.add(line);
@@ -195,11 +192,11 @@ public class FtpClient {
 	}
 	
 	public void setDataPort(int dataPort) {
-		this.dataPort = dataPort;
+		this.ftpConfig.setConfiguredDataPort(dataPort);
 	}
 
 	public int getDataPort() {
-		return this.dataPort;
+		return this.ftpConfig.getDataPort();
 	}
 
 	public void delete(String path) throws FtpException {

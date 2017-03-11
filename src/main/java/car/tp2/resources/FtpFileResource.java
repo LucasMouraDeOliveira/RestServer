@@ -6,7 +6,6 @@ import java.io.InputStream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -22,8 +21,6 @@ import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 
 import car.tp2.ftp.FtpClient;
 import car.tp2.ftp.FtpException;
-import car.tp2.ftp.FtpFactory;
-import car.tp2.ftp.socket.FtpCommandSocket;
 
 @Path("/file")
 public class FtpFileResource {

@@ -17,9 +17,9 @@ public abstract class FtpSocket {
 		this.socket = this.ftpFactory.buildEmptySocket();
 	}
 	
-	public boolean openSocket(String commandAddress, int commandPort) throws FtpException{
+	public boolean openSocket(String address, int port) throws FtpException{
 		try {
-			this.socket.connect(this.ftpFactory.buildInetAddress(commandAddress, commandPort));
+			this.socket.connect(this.ftpFactory.buildInetAddress(address, port));
 			this.openReaders(); 
 			return true;
 		} catch (IOException e) {
