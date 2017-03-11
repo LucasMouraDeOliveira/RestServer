@@ -87,5 +87,9 @@ public class FtpFactory {
 	public FtpRequest buildRntoCommand(String to) {
 		return new FtpRequest("RNTO " + to);
 	}
+		
+	public FtpRequest buildStorRequest(String fileName) {
+		return new FtpRequest("STOR " + fileName);
+	}
 
 }

@@ -18,6 +18,11 @@ hs_err_pid*
 .project
 *.classpath
 *.png
-tmp/test2.txt
-tmp/changement_coucou
-tmp/coucou_edzfdsgsd
+tmp/*
+=======
+
+/bin/
+/target/
+
+# Les .DS_Store qui font chier
+.DS_Store
