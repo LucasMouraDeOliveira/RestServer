@@ -29,13 +29,8 @@ public class FtpFileResource {
 	@Produces("application/octet-stream")
 	public Response getFile(@PathParam("path") String path) {
 		try {
-			FtpFactory ftpFactory = new FtpFactory();
-			FtpCommandSocket commandSocket = new FtpCommandSocket(ftpFactory);
-			FtpClient client = new FtpClient(commandSocket, ftpFactory);
-			client.openSocket("localhost", 2021);
+			FtpClient client = new FtpClient();
 			File file = null;
-			client.connect("lucas", "l");
-			client.setPassive();
 			file = client.download(path);
 			if(file == null){
 				return Response.status(Response.Status.NOT_FOUND).build();
