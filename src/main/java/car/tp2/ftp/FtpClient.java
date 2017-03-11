@@ -115,21 +115,30 @@ public class FtpClient {
 		return file;
 	}
 	
-	public void upload(InputStream inputStream, String fileName) throws FtpException{
+	public void upload(InputStream inputStream, String fileName, String path) throws FtpException{
 		if(!this.isConnected()) {
 			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
 		}
 		if(this.getDataPort() == 0){
 			throw new FtpException("Le mode passif n'est pas actif");
 		}
-		this.commandSocket.send(this.ftpFactory.buildStorRequest(fileName));
-		try {
-			FtpDataSocket dataSocket = new FtpDataSocket(this.ftpFactory);
-			dataSocket.openSocket("localhost", this.dataPort);
-			dataSocket.writeDataInWriter(inputStream);
-			dataSocket.closeReaders();
-		} catch (IOException e) {
-			throw new FtpException("Erreur interne");
+		FtpReply reply = this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildCwdRequest(path));
+		if(reply.isOk("250")){
+			reply = this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildStorRequest(fileName));
+			if(reply.isOk("150")){
+				try {
+					FtpDataSocket dataSocket = new FtpDataSocket(this.ftpFactory);
+					dataSocket.openSocket("localhost", this.dataPort);
+					dataSocket.writeDataInWriter(inputStream);
+					dataSocket.closeReaders();
+				} catch (IOException e) {
+					throw new FtpException("Erreur interne");
+				}
+			} else {
+				throw new FtpException("Le fichier existe déjà");
+			}
+		} else {
+			throw new FtpException("Chemin d'accès invalide");
 		}
 	}
 	

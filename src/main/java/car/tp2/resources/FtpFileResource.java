@@ -51,26 +51,21 @@ public class FtpFileResource {
 	}
 	
 	@POST
-	@Path("/upload")
+	@Path("/upload/{path : .*}")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response postFile(MultipartBody body){
+	public Response postFile(MultipartBody body, @PathParam("path") String path){
 		for(Attachment attachment : body.getAllAttachments()){
 			try {
 				InputStream inputStream = attachment.getDataHandler().getInputStream();
 				String fileName = attachment.getDataHandler().getName();
-				FtpFactory ftpFactory = new FtpFactory();
-				FtpCommandSocket commandSocket = new FtpCommandSocket(ftpFactory);
-				FtpClient client = new FtpClient(commandSocket, ftpFactory);
-				client.openSocket("localhost", 2021);
-				client.connect("lucas", "l");
-				client.setPassive();
-				client.upload(inputStream, fileName);
+				FtpClient client = new FtpClient();
+				client.upload(inputStream, fileName, path);
 				client.close();
 			} catch (IOException | FtpException e) {
 				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 			}
 		}
-		return Response.ok("bien reçu").build();
+		return Response.ok().build();
 	}
 	
 	@PUT
