@@ -23,6 +23,14 @@ public class FtpClient {
 		this.ftpFactory = ftpFactory;
 		this.commandPort = 0;
 	}
+	
+	public FtpClient() throws IOException, FtpException{
+		this.ftpFactory = new FtpFactory();
+		this.commandSocket = new FtpCommandSocket(ftpFactory);
+		this.openSocket("localhost", 2021);
+		this.connect("lucas", "l");
+		this.setPassive();
+	}
 
 	public void openSocket(String commandAddress, int commandPort) throws FtpException {
 		if(this.commandSocket.openSocket(commandAddress, commandPort)){
