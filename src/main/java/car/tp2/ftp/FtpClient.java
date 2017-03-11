@@ -24,6 +24,14 @@ public class FtpClient {
 		this.ftpFactory = ftpFactory;
 		this.commandPort = 0;
 	}
+	
+	public FtpClient() throws IOException, FtpException{
+		this.ftpFactory = new FtpFactory();
+		this.commandSocket = new FtpCommandSocket(ftpFactory);
+		this.openSocket("localhost", 2021);
+		this.connect("lucas", "l");
+		this.setPassive();
+	}
 
 	public void openSocket(String commandAddress, int commandPort) throws FtpException {
 		if(this.commandSocket.openSocket(commandAddress, commandPort)){
@@ -192,6 +200,30 @@ public class FtpClient {
 
 	public int getDataPort() {
 		return this.dataPort;
+	}
+
+	public void delete(String path) throws FtpException {
+		if(!this.isConnected()){
+			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
+		}
+		//Envoi de la commande RMD
+		FtpReply reply = this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildRmdCommand(path));
+		if(!reply.isOk("200")){
+			throw new FtpException("Echec de la suppression");
+		}
+
+	}
+
+	public void rename(String from, String to) throws FtpException {
+		if(!this.isConnected())
+			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
+		//Envoi de la commande RNFR
+		FtpReply reply = this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildRnfrCommand(from));
+		if(!reply.isOk("350"))
+			throw new FtpException("Echec du renommage");
+		reply = this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildRntoCommand(to));
+		if(!reply.isOk("200"))
+			throw new FtpException("Echec du renommage");
 	}
 
 }

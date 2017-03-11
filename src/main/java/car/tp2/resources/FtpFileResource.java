@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -29,13 +31,8 @@ public class FtpFileResource {
 	@Produces("application/octet-stream")
 	public Response getFile(@PathParam("path") String path) {
 		try {
-			FtpFactory ftpFactory = new FtpFactory();
-			FtpCommandSocket commandSocket = new FtpCommandSocket(ftpFactory);
-			FtpClient client = new FtpClient(commandSocket, ftpFactory);
-			client.openSocket("localhost", 2021);
+			FtpClient client = new FtpClient();
 			File file = null;
-			client.connect("lucas", "l");
-			client.setPassive();
 			file = client.download(path);
 			if(file == null){
 				return Response.status(Response.Status.NOT_FOUND).build();
@@ -70,6 +67,32 @@ public class FtpFileResource {
 			}
 		}
 		return Response.ok().build();
+	}
+	
+	@PUT
+	@Path("/rename/{to : [^/]*}/{from : .*}")
+	public Response renameFile(@PathParam("to") String to,@PathParam("from") String from){
+		FtpClient client;
+		try {
+			client = new FtpClient();
+			client.rename(from,to);
+			return Response.ok().build();
+		} catch (IOException | FtpException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@DELETE
+	@Path("/{path : .*}")
+	@Produces("application/octet-stream")
+	public Response deleteFile(@PathParam("path") String path) {
+		try {
+			FtpClient client = new FtpClient();
+			client.delete(path);
+			return Response.ok().build();
+		} catch (FtpException | IOException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 	
 }
