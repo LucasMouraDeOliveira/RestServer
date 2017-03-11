@@ -76,4 +76,8 @@ public class FtpFactory {
 		return new FtpRequest("CWD " + path);
 	}
 
+	public FtpRequest buildRmdCommand(String path) {
+		return new FtpRequest("RMD " + path);
+	}
+
 }

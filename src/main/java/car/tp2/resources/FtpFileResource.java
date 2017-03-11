@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -59,6 +60,18 @@ public class FtpFileResource {
 			}
 		}
 		return Response.ok("bien reçu").build();
+	}
+	
+	@DELETE
+	@Path("/{path : .*}")
+	@Produces("application/octet-stream")
+	public Response deleteFile(@PathParam("path") String path) {
+		try {
+			FtpClient client = new FtpClient();
+			return Response.ok(client.delete(path).getCode()).build();
+		} catch (FtpException | IOException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 	
 }

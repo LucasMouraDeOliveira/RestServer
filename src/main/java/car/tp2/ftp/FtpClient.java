@@ -175,4 +175,13 @@ public class FtpClient {
 		return this.dataPort;
 	}
 
+	public FtpReply delete(String path) throws FtpException {
+		if(!this.isConnected()){
+			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
+		}
+		//Envoi de la commande RMD
+		return this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildRmdCommand(path));
+
+	}
+
 }
