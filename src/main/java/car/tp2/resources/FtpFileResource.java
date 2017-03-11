@@ -48,6 +48,19 @@ public class FtpFileResource {
 	}
 	
 	@POST
+	@Path("/mkdir/{path : .*}")
+	public Response createDirectory(@PathParam("path") String path){
+		try {
+			FtpClient client = new FtpClient();
+			client.mkdir(path);
+			client.close();
+			return Response.ok().build();
+		} catch (IOException | FtpException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		} 
+	}
+	
+	@POST
 	@Path("/upload/{path : .*}")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response postFile(MultipartBody body, @PathParam("path") String path){
