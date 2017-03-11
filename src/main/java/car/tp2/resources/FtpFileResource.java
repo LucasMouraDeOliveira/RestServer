@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -62,13 +63,27 @@ public class FtpFileResource {
 		return Response.ok("bien reçu").build();
 	}
 	
+	@PUT
+	@Path("/rename/{to : [^/]*}/{from : .*}")
+	public Response renameFile(@PathParam("to") String to,@PathParam("from") String from){
+		FtpClient client;
+		try {
+			client = new FtpClient();
+			client.rename(from,to);
+			return Response.ok().build();
+		} catch (IOException | FtpException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
 	@DELETE
 	@Path("/{path : .*}")
 	@Produces("application/octet-stream")
 	public Response deleteFile(@PathParam("path") String path) {
 		try {
 			FtpClient client = new FtpClient();
-			return Response.ok(client.delete(path).getCode()).build();
+			client.delete(path);
+			return Response.ok().build();
 		} catch (FtpException | IOException e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}

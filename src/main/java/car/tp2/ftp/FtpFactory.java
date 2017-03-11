@@ -69,7 +69,7 @@ public class FtpFactory {
 	}
 
 	public FtpRequest buildListRequest(String path) {
-		return new FtpRequest("LIST " + path);
+		return new FtpRequest("MLST " + path);
 	}
 
 	public FtpRequest buildCwdRequest(String path) {
@@ -78,6 +78,14 @@ public class FtpFactory {
 
 	public FtpRequest buildRmdCommand(String path) {
 		return new FtpRequest("RMD " + path);
+	}
+
+	public FtpRequest buildRnfrCommand(String from) {
+		return new FtpRequest("RNFR " + from);
+	}
+	
+	public FtpRequest buildRntoCommand(String to) {
+		return new FtpRequest("RNTO " + to);
 	}
 
 }

@@ -175,13 +175,28 @@ public class FtpClient {
 		return this.dataPort;
 	}
 
-	public FtpReply delete(String path) throws FtpException {
+	public void delete(String path) throws FtpException {
 		if(!this.isConnected()){
 			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
 		}
 		//Envoi de la commande RMD
-		return this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildRmdCommand(path));
+		FtpReply reply = this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildRmdCommand(path));
+		if(!reply.isOk("200")){
+			throw new FtpException("Echec de la suppression");
+		}
 
+	}
+
+	public void rename(String from, String to) throws FtpException {
+		if(!this.isConnected())
+			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
+		//Envoi de la commande RNFR
+		FtpReply reply = this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildRnfrCommand(from));
+		if(!reply.isOk("350"))
+			throw new FtpException("Echec du renommage");
+		reply = this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildRntoCommand(to));
+		if(!reply.isOk("200"))
+			throw new FtpException("Echec du renommage");
 	}
 
 }

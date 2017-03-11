@@ -25,27 +25,24 @@ public class FtpFolderResource {
 	public Response listFiles(@PathParam("path") String path) {
 		System.out.println("Path = " + path);
 		try {
-			FtpFactory ftpFactory = new FtpFactory();
-			FtpCommandSocket commandSocket = new FtpCommandSocket(ftpFactory);
-			FtpClient client = new FtpClient(commandSocket, ftpFactory);
-			client.openSocket("localhost", 2021);
-			client.connect("lucas", "l");
-			client.setPassive();
+			FtpClient client = new FtpClient();
 			List<String> files = client.list(path);
 			String html = "<html><body><ul>";
 			for(String file : files){
+				int index = file.indexOf("type=");
+				String type = file.substring(index+5,file.indexOf(";",index));
+				String filename = file.split("; ")[file.split("; ").length-1];
 				if(!file.isEmpty()){
-					//TODO attendre le refactoring de la commande LIST pour différencier proprement les fichiers des dossiers
-					if(file.contains(".")){
-						html+="<li><a href='/rest/tp2/file/"+path+"/"+file+"'>"+file+"</a></li>";
+					if(type.equals("file")){
+						html+="<li><a href='/rest/tp2/file/"+path+"/"+filename+"'>"+filename+"</a></li>";
 					} else {
-						html+="<li><a href='/rest/tp2/folder/"+(path.isEmpty()?"":path+"/")+file+"'>"+file+"</a></li>";
+						html+="<li>D: <a href='/rest/tp2/folder/"+(path.isEmpty()?"":path+"/")+filename+"'>"+filename+"</a></li>";
 					}
 				}
 			}
 			
 			if(!path.isEmpty()){
-				html+="<li><a href='/rest/tp2/folder/"+path+"/..'>..</a></li>";
+				html+="</br><li><a href='/rest/tp2/folder/"+path+"/..'> retour</a></li>";
 			}
 			html+="</ul></body></html>";
 			return Response.ok(html).build();
