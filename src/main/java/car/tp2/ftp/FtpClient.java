@@ -9,6 +9,8 @@ import java.util.List;
 import car.tp2.ftp.socket.FtpCommandSocket;
 import car.tp2.ftp.socket.FtpDataSocket;
 import car.tp2.utility.FtpConfig;
+import car.tp2.utility.User;
+import car.tp2.utility.UserManagment;
 
 /**
  * Classe qui définit les méthodes de communication avec le serveur FTP
@@ -39,12 +41,13 @@ public class FtpClient {
 	 * @throws IOException
 	 * @throws FtpException en cas d'erreur de communication avec le serveur FTP
 	 */
-	public FtpClient() throws IOException, FtpException{
+	public FtpClient(String token) throws IOException, FtpException{
+		User user = UserManagment.getInstance().getUser(token);
 		this.ftpFactory = new FtpFactory();
 		this.commandSocket = new FtpCommandSocket(ftpFactory);
 		this.ftpConfig = new FtpConfig();
 		this.openSocket(this.ftpConfig.getCommandAddress(), this.ftpConfig.getCommandPort());
-		this.connect("lucas", "l");
+		this.connect(user.getNom(), user.getMdp());
 		this.setPassive();
 	}
 
@@ -316,6 +319,7 @@ public class FtpClient {
 	 * @throws FtpException si le renommage échoue pour une quelconque raison
 	 */
 	public void rename(String from, String to) throws FtpException {
+		System.out.println("Rename "+from+" to "+to);
 		if(!this.isConnected())
 			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
 		//Envoi de la commande RNFR

@@ -6,6 +6,7 @@ import java.io.InputStream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -28,9 +29,9 @@ public class FtpFileResource {
 	@GET
 	@Path("/{path : .*}")
 	@Produces("application/octet-stream")
-	public Response getFile(@PathParam("path") String path) {
+	public Response getFile(@PathParam("path") String path,@QueryParam("token") String token) {
 		try {
-			FtpClient client = new FtpClient();
+			FtpClient client = new FtpClient(token);
 			File file = null;
 			file = client.download(path);
 			client.close();
@@ -49,9 +50,9 @@ public class FtpFileResource {
 	
 	@POST
 	@Path("/mkdir/{path : .*}")
-	public Response createDirectory(@PathParam("path") String path){
+	public Response createDirectory(@PathParam("path") String path,@QueryParam("token") String token){
 		try {
-			FtpClient client = new FtpClient();
+			FtpClient client = new FtpClient(token);
 			client.mkdir(path);
 			client.close();
 			return Response.ok().build();
@@ -63,12 +64,12 @@ public class FtpFileResource {
 	@POST
 	@Path("/upload/{path : .*}")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response postFile(MultipartBody body, @PathParam("path") String path){
+	public Response postFile(MultipartBody body, @PathParam("path") String path,@QueryParam("token") String token){
 		for(Attachment attachment : body.getAllAttachments()){
 			try {
 				InputStream inputStream = attachment.getDataHandler().getInputStream();
 				String fileName = attachment.getDataHandler().getName();
-				FtpClient client = new FtpClient();
+				FtpClient client = new FtpClient(token);
 				client.upload(inputStream, fileName, path);
 				client.close();
 			} catch (IOException | FtpException e) {
@@ -80,10 +81,11 @@ public class FtpFileResource {
 	
 	@PUT
 	@Path("/rename")
-	public Response renameFile(@QueryParam("from") String from,@QueryParam("to") String to){
+	public Response renameFile(@FormParam("from") String from,@FormParam("to") String to,@QueryParam("token") String token){
+		System.out.println("rename " +from+" "+ to);
 		FtpClient client;
 		try {
-			client = new FtpClient();
+			client = new FtpClient(token);
 			client.rename(from,to);
 			client.close();
 			return Response.ok().build();
@@ -95,9 +97,9 @@ public class FtpFileResource {
 	@DELETE
 	@Path("/{path : .*}")
 	@Produces("application/octet-stream")
-	public Response deleteFile(@PathParam("path") String path) {
+	public Response deleteFile(@PathParam("path") String path,@QueryParam("token") String token) {
 		try {
-			FtpClient client = new FtpClient();
+			FtpClient client = new FtpClient(token);
 			client.delete(path);
 			client.close();
 			return Response.ok().build();
