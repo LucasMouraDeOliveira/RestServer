@@ -140,7 +140,7 @@ public class FtpClient {
 			FtpDataSocket dataSocket = new FtpDataSocket(this.ftpFactory);
 			dataSocket.openSocket(this.ftpConfig.getCommandAddress(), this.ftpConfig.getDataPort());
 			//Reception des données sur la socket de données
-			file = dataSocket.readFileFromReader(path.replace("/", "_"));
+			file = dataSocket.readFileFromReader(path.split("/")[path.length()-1]);
 			dataSocket.closeReaders();
 		} catch (IOException e) {
 			throw new FtpException("Erreur interne");
