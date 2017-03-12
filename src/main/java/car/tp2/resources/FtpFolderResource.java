@@ -14,6 +14,7 @@ import car.tp2.ftp.FtpClient;
 import car.tp2.ftp.FtpException;
 import car.tp2.ftp.FtpFactory;
 import car.tp2.ftp.socket.FtpCommandSocket;
+import car.tp2.utility.HtmlFactory;
 
 
 @Path("/folder")
@@ -27,24 +28,7 @@ public class FtpFolderResource {
 		try {
 			FtpClient client = new FtpClient();
 			List<String> files = client.list(path);
-			String html = "<html><body><ul>";
-			for(String file : files){
-				int index = file.indexOf("type=");
-				String type = file.substring(index+5,file.indexOf(";",index));
-				String filename = file.split("; ")[file.split("; ").length-1];
-				if(!file.isEmpty()){
-					if(type.equals("file")){
-						html+="<li><a href='/rest/tp2/file/"+path+"/"+filename+"'>"+filename+"</a></li>";
-					} else {
-						html+="<li>D: <a href='/rest/tp2/folder/"+(path.isEmpty()?"":path+"/")+filename+"'>"+filename+"</a></li>";
-					}
-				}
-			}
-			
-			if(!path.isEmpty()){
-				html+="</br><li><a href='/rest/tp2/folder/"+path+"/..'> retour</a></li>";
-			}
-			html+="</ul></body></html>";
+			String html = new HtmlFactory().buildList(path,files);
 			client.close();
 			return Response.ok(html).build();
 		} catch (FtpException | IOException e) {
