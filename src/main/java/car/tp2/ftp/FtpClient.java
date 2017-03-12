@@ -137,7 +137,7 @@ public class FtpClient {
 			FtpDataSocket dataSocket = new FtpDataSocket(this.ftpFactory);
 			dataSocket.openSocket(this.ftpConfig.getCommandAddress(), this.ftpConfig.getDataPort());
 			//Reception des données sur la socket de données
-			file = dataSocket.readDataInReader(path.replace("/", "_"));
+			file = dataSocket.readFileFromReader(path.replace("/", "_"));
 			dataSocket.closeReaders();
 		} catch (IOException e) {
 			throw new FtpException("Erreur interne");
@@ -254,7 +254,7 @@ public class FtpClient {
 			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
 		}
 		FtpReply reply = this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildSetPassiveRequest());
-		if(!reply.isOk("200")){
+		if(reply.isOk("229")){
 			String[] split = reply.getMessage().split("\\|");
 			try{
 				this.setDataPort(Integer.valueOf(split[3]));
@@ -272,14 +272,21 @@ public class FtpClient {
 	 * @param dataPort le nouveau numéro de port
 	 */
 	public void setDataPort(int dataPort) {
-		this.ftpConfig.setConfiguredDataPort(dataPort);
+		this.getConfig().setConfiguredDataPort(dataPort);
 	}
 
 	/**
 	 * @return le numéro de port pour la connexion au serveur FTP sur la socket de données
 	 */
 	public int getDataPort() {
-		return this.ftpConfig.getDataPort();
+		return this.getConfig().getDataPort();
+	}
+	
+	/**
+	 * @return la configuration FTP
+	 */
+	public FtpConfig getConfig() {
+		return this.ftpConfig;
 	}
 
 	/**
