@@ -1,5 +1,7 @@
 package car.tp2;
 
+import java.io.File;
+
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -17,6 +19,9 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 public class Starter {
 	
 	public static void main( final String[] args ) throws Exception {
+		File tmp = new File("tmp");
+		if(tmp.exists())
+			recursiveDelete(tmp);
 		
 		Server server = new Server( 8080 );
 		        
@@ -32,5 +37,16 @@ public class Starter {
         server.setHandler( context );
         server.start();
         server.join();	
+	}
+	
+	private static boolean recursiveDelete(File parent) {
+		for(File f : parent.listFiles()){
+			if(f.isDirectory()){
+				recursiveDelete(f);
+			}else{
+				f.delete();
+			}
+		}
+		return parent.delete();
 	}
 }
