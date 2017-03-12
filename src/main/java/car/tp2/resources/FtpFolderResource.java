@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -23,17 +24,16 @@ public class FtpFolderResource {
 	@GET
 	@Path("/{path: .*}")
 	@Produces(MediaType.TEXT_HTML)
-	public Response listFiles(@PathParam("path") String path) {
+	public Response listFiles(@PathParam("path") String path,@QueryParam("token") String token) {
 		System.out.println("Path = " + path);
 		try {
-			FtpClient client = new FtpClient();
+			FtpClient client = new FtpClient(token);
 			List<String> files = client.list(path);
-			String html = new HtmlFactory().buildList(path,files);
+			String html = new HtmlFactory(token).buildList(path,files);
 			client.close();
 			return Response.ok(html).build();
 		} catch (FtpException | IOException e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	
 }
