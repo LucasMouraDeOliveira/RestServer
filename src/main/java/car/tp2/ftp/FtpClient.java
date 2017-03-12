@@ -10,6 +10,12 @@ import car.tp2.ftp.socket.FtpCommandSocket;
 import car.tp2.ftp.socket.FtpDataSocket;
 import car.tp2.utility.FtpConfig;
 
+/**
+ * Classe qui définit les méthodes de communication avec le serveur FTP
+ * 
+ * 
+ * @author Lucas Moura de Oliveira
+ */
 public class FtpClient {
 	
 	protected FtpCommandSocket commandSocket;
@@ -26,6 +32,13 @@ public class FtpClient {
 		this.ftpConfig = ftpConfig;
 	}
 	
+	/**
+	 * Initialise le client FTP. Récupère l'adresse du serveur FTP dans le fichier de configuration
+	 * et tente de se connecter sur le port de commande.
+	 * 
+	 * @throws IOException
+	 * @throws FtpException en cas d'erreur de communication avec le serveur FTP
+	 */
 	public FtpClient() throws IOException, FtpException{
 		this.ftpFactory = new FtpFactory();
 		this.commandSocket = new FtpCommandSocket(ftpFactory);
@@ -35,6 +48,13 @@ public class FtpClient {
 		this.setPassive();
 	}
 
+	/**
+	 * Connecte le client au serveur FTP
+	 * 
+	 * @param address l'adresse du serveur FTP
+	 * @param port le numéro de port de la socket de commande du serveur FTP
+	 * @throws FtpException si la tentative de connexion échoue
+	 */
 	public void openSocket(String address, int port) throws FtpException {
 		if(this.commandSocket.openSocket(address, port)){
 			//Lecture de la première ligne (message de bienvenue)
@@ -49,10 +69,16 @@ public class FtpClient {
 		}
 	}
 
+	/**
+	 * @return vrai si la connexion au serveur FTP sur la socket de commande est active.
+	 */
 	public boolean isSocketOpen() {
 		return this.open;
 	}
 	
+	/**
+	 * @return vrai si l'utilisateur est connecté et authentifié sur le serveur FTP
+	 */
 	public boolean isConnected() {
 		return this.open && this.connected;
 	}
@@ -64,7 +90,7 @@ public class FtpClient {
 	 * @param user le login de l'utilisateur, sous forme de chaine de caractères
 	 * @param password le mot de passe non crypté de l'utilisateur, sous forme de chaine de caractères
 	 * 
-	 * @throws IOException si l'envoi de la requête ou la réception de la réponse échoue
+	 * @throws FTPException si l'envoi de la requête ou la réception de la réponse échoue
 	 */
 	public void connect(String user, String password) throws FtpException {
 		//Si la socket n'est pas ouverte, on ne peut pas se connecter -> erreur
@@ -87,6 +113,14 @@ public class FtpClient {
 		}
 	}
 
+	/**
+	 * Télécharge un fichier depuis le serveur FTP
+	 * 
+	 * @param path le chemin d'accès au fichier sur le serveur
+	 * 
+	 * @return le fichier
+	 * @throws FtpException si la récupération du fichier échoue pour une quelconque raison
+	 */
 	public File download(String path) throws FtpException{
 		if(!this.isConnected()){
 			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
@@ -112,6 +146,14 @@ public class FtpClient {
 		return file;
 	}
 	
+	/**
+	 * Upload un fichier sur le serveur FTP
+	 * 
+	 * @param inputStream le flux de données représentant le fichier
+	 * @param fileName le nom du fichier sur le serveur FTP
+	 * @param path le chemin d'accès au fichier sur le serveur FTP
+	 * @throws FtpException si l'upload de fichier échoue pour une quelconque raison
+	 */
 	public void upload(InputStream inputStream, String fileName, String path) throws FtpException{
 		if(!this.isConnected()) {
 			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
@@ -139,6 +181,16 @@ public class FtpClient {
 		}
 	}
 	
+	/**
+	 * Liste les fichiers d'un répertoire sur le serveur FTP
+	 * 
+	 * @param path le chemin d'accès au répertoire
+	 * 
+	 * @return une liste de String contenant diverses informations (nom, date de modif, type, ...)
+	 * sur les fichiers contenus dans le dossier
+	 * 
+	 * @throws FtpException si la récupération des fichiers échoue pour une quelconque raison
+	 */
 	public List<String> list(String path) throws FtpException {
 		if(!this.isConnected()){
 			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
@@ -166,14 +218,37 @@ public class FtpClient {
 		}
 	}
 	
+	/**
+	 * Envoie une commande USER au serveur FTP
+	 * 
+	 * @param user le login de l'utilisateur
+	 * 
+	 * @return une réponse FTP
+	 * 
+	 * @throws FtpException si l'envoi de la commande ou la récupération de la réponse échoue
+	 */
 	public FtpReply sendUserCommand(String user) throws FtpException {
 		return this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildUserRequest(user));
 	}
 	
+	/**
+	 * Envoie une commande PASS au serveur FTP
+	 * 
+	 * @param password le mot de passe de l'utilisateur
+	 * 
+	 * @return une réponse FTP
+	 * 
+	 * @throws FtpException si l'envoi de la commande ou la récupération de la réponse échoue
+	 */
 	public FtpReply sendPasswordCommand(String password) throws FtpException {
 		return this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildPasswordRequest(password));
 	}
 	
+	/**
+	 * Demande au serveur de passer la connexion en mode passif
+	 * 
+	 * @throws FtpException si le passage en mode passif échoue pour une quelconque raison
+	 */
 	public void setPassive() throws FtpException {
 		if(!this.isConnected()){
 			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
@@ -191,14 +266,29 @@ public class FtpClient {
 		}
 	}
 	
+	/**
+	 * Met à jour le numéro de port pour la connexion au serveur FTP sur la socket de données
+	 * 
+	 * @param dataPort le nouveau numéro de port
+	 */
 	public void setDataPort(int dataPort) {
 		this.ftpConfig.setConfiguredDataPort(dataPort);
 	}
 
+	/**
+	 * @return le numéro de port pour la connexion au serveur FTP sur la socket de données
+	 */
 	public int getDataPort() {
 		return this.ftpConfig.getDataPort();
 	}
 
+	/**
+	 * Supprime un fichier sur le serveur FTP
+	 * 
+	 * @param path le chemin d'accès au fichier
+	 * 
+	 * @throws FtpException si la suppression échoue pour une quelconque raison
+	 */
 	public void delete(String path) throws FtpException {
 		if(!this.isConnected()){
 			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
@@ -208,9 +298,16 @@ public class FtpClient {
 		if(!reply.isOk("200")){
 			throw new FtpException("Echec de la suppression");
 		}
-
 	}
 
+	/**
+	 * Renomme un fichier sur le serveur FTP
+	 * 
+	 * @param from le nom d'origine du fichier
+	 * @param to le nouveau nom du fichier
+	 * 
+	 * @throws FtpException si le renommage échoue pour une quelconque raison
+	 */
 	public void rename(String from, String to) throws FtpException {
 		if(!this.isConnected())
 			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
@@ -223,6 +320,13 @@ public class FtpClient {
 			throw new FtpException("Echec du renommage");
 	}
 
+	/**
+	 * Crée un dossier sur le serveur FTP
+	 * 
+	 * @param path le chemin d'accès au fichier
+	 * 
+	 * @throws FtpException si la création de dossier échoue pour une quelconque raison
+	 */
 	public void mkdir(String path) throws FtpException {
 		if(!this.isConnected())
 			throw new FtpException("Commande refusée : vous n'êtes pas connecté");
@@ -232,6 +336,11 @@ public class FtpClient {
 			throw new FtpException("Echec de la creation");
 	}
 
+	/**
+	 * Ferme la connexion au serveur FTP
+	 * 
+	 * @throws IOException
+	 */
 	public void close() throws IOException {
 		this.commandSocket.send(this.ftpFactory.buildQuitCommand());
 		this.commandSocket.close();
