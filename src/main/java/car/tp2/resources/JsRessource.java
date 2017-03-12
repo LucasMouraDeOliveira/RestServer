@@ -1,8 +1,6 @@
 package car.tp2.resources;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -11,12 +9,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import car.tp2.ftp.FtpClient;
-import car.tp2.ftp.FtpException;
-import car.tp2.utility.HtmlFactory;
-
 @Path("/js")
-public class FtpJsRessource {
+public class JsRessource {
 	
 	@GET
 	@Path("/{path: .*}")

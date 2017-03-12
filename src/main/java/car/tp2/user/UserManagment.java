@@ -1,4 +1,4 @@
-package car.tp2.utility;
+package car.tp2.user;
 
 import java.util.HashMap;
 import java.util.UUID;

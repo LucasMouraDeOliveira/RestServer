@@ -9,9 +9,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import car.tp2.factory.FtpFactory;
 import car.tp2.ftp.FtpClient;
 import car.tp2.ftp.FtpException;
-import car.tp2.ftp.FtpFactory;
 import car.tp2.ftp.FtpReply;
 import car.tp2.ftp.FtpRequest;
 import car.tp2.ftp.socket.FtpCommandSocket;

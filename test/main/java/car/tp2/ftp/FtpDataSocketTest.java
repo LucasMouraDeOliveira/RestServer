@@ -16,8 +16,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import car.tp2.factory.FtpFactory;
 import car.tp2.ftp.FtpException;
-import car.tp2.ftp.FtpFactory;
 import car.tp2.ftp.socket.FtpDataSocket;
 
 public class FtpDataSocketTest extends FtpSocketTest{

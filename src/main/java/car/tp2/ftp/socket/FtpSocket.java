@@ -3,7 +3,7 @@ package car.tp2.ftp.socket;
 import java.io.IOException;
 import java.net.Socket;
 
-import car.tp2.ftp.FtpFactory;
+import car.tp2.factory.FtpFactory;
 
 /**
  * Classe abstraites définissant les méthodes de communication avec le serveur FTP.

@@ -11,15 +11,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import car.tp2.factory.HtmlFactory;
 import car.tp2.ftp.FtpClient;
 import car.tp2.ftp.FtpException;
-import car.tp2.ftp.FtpFactory;
-import car.tp2.ftp.socket.FtpCommandSocket;
-import car.tp2.utility.HtmlFactory;
 
 
 @Path("/folder")
-public class FtpFolderResource {
+public class FolderResource {
 
 	@GET
 	@Path("/{path: .*}")

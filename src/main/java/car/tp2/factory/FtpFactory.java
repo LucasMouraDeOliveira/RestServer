@@ -1,4 +1,4 @@
-package car.tp2.ftp;
+package car.tp2.factory;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -9,6 +9,9 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+
+import car.tp2.ftp.FtpReply;
+import car.tp2.ftp.FtpRequest;
 
 /**
  * Classe utilitaire de création d'objets (commandes, readers, writers, ...)

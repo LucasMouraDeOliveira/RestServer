@@ -1,4 +1,4 @@
-package car.tp2.utility;
+package car.tp2.factory;
 
 import java.util.List;
 

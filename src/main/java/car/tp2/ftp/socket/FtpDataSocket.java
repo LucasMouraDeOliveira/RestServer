@@ -10,8 +10,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 
+import car.tp2.factory.FtpFactory;
 import car.tp2.ftp.FtpException;
-import car.tp2.ftp.FtpFactory;
 
 public class FtpDataSocket extends FtpSocket {
 	

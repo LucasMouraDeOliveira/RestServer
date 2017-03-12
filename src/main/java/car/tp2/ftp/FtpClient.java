@@ -6,11 +6,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import car.tp2.factory.FtpFactory;
 import car.tp2.ftp.socket.FtpCommandSocket;
 import car.tp2.ftp.socket.FtpDataSocket;
+import car.tp2.user.User;
+import car.tp2.user.UserManagment;
 import car.tp2.utility.FtpConfig;
-import car.tp2.utility.User;
-import car.tp2.utility.UserManagment;
 
 /**
  * Classe qui définit les méthodes de communication avec le serveur FTP
@@ -47,7 +48,7 @@ public class FtpClient {
 		this.commandSocket = new FtpCommandSocket(ftpFactory);
 		this.ftpConfig = new FtpConfig();
 		this.openSocket(this.ftpConfig.getCommandAddress(), this.ftpConfig.getCommandPort());
-		this.connect(user.getNom(), user.getMdp());
+		this.connect(user.getName(), user.getPassword());
 		this.setPassive();
 	}
 

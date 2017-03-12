@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import car.tp2.factory.FtpFactory;
 import car.tp2.ftp.FtpException;
-import car.tp2.ftp.FtpFactory;
 import car.tp2.ftp.FtpReply;
 import car.tp2.ftp.FtpRequest;
 

@@ -16,10 +16,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
-import car.tp2.resources.FtpFileResource;
-import car.tp2.resources.FtpFolderResource;
-import car.tp2.resources.FtpJsRessource;
-import car.tp2.resources.FtpUserResource;
+import car.tp2.resources.FileResource;
+import car.tp2.resources.FolderResource;
+import car.tp2.resources.JsRessource;
+import car.tp2.resources.UserResource;
 
 /**
  * Configuration de l'application.
@@ -35,10 +35,10 @@ public class Config {
 	 * Ajouter une ligne par classe de ressource REST.
 	 */
 	protected void addResources( List<Object> resources ) {
-		resources.add(new FtpFileResource());
-		resources.add(new FtpFolderResource());
-		resources.add(new FtpJsRessource());
-		resources.add(new FtpUserResource());
+		resources.add(new FileResource());
+		resources.add(new FolderResource());
+		resources.add(new JsRessource());
+		resources.add(new UserResource());
 	}
 	
 	/**

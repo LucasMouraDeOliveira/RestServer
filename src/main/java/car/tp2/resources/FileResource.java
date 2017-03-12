@@ -24,7 +24,7 @@ import car.tp2.ftp.FtpClient;
 import car.tp2.ftp.FtpException;
 
 @Path("/file")
-public class FtpFileResource {
+public class FileResource {
 	
 	@GET
 	@Path("/{path : .*}")
