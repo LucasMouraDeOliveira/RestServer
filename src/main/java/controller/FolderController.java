@@ -26,6 +26,12 @@ import user.UserManagment;
 @RequestMapping("/folder")
 public class FolderController {
 	
+	/**
+	 * Route pour lister les fichier dans un dossier sous forme d'une page html
+	 * @param path du dossier
+	 * @param token pour se connecter
+	 * @return html
+	 */
 	@RequestMapping(params={"path", "token"}, method=RequestMethod.GET)
 	@ResponseBody 
 	public String listFiles(@RequestParam(value="path") String path, @RequestParam(value="token") String token) {
@@ -47,6 +53,11 @@ public class FolderController {
 		}
 	}
 	
+	/**
+	 * Route pour cree un dossier
+	 * @param path du dossier
+	 * @param token pour se connecter
+	 */
 	@RequestMapping(value="/mkdir", params={"path", "token"}, method=RequestMethod.POST)
 	public String createDirectory(@RequestParam("path") String path,@RequestParam(value="token") String token){
 		// Vérification connexion
@@ -66,6 +77,12 @@ public class FolderController {
 		}
 	}
 	
+	/**
+	 * Route pour telecharger un dossier sous forme de zip
+	 * @param response le zip renvoyer
+	 * @param path du dossier
+	 * @param token pour se connecter
+	 */
 	@RequestMapping(value = "/download", params = { "path", "token" }, method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@ResponseBody
 	public void downloadFolder(HttpServletResponse response, @RequestParam(value = "path") String path, @RequestParam(value = "token") String token) {

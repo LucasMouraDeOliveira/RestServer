@@ -16,12 +16,20 @@ import utility.FtpConfig;
 @RequestMapping("/user")
 public class UserController {
 	
+	/**
+	 * Route pour recupere l'html de connection
+	 * @return html
+	 */
 	@RequestMapping(method=RequestMethod.GET)
 	public String getUserForm() {
 		HtmlFactory htmlFactory = new HtmlFactory();
 		return htmlFactory.buildFormUser();
 	}
 	
+	/**
+	 * Route pour se connecter il renvoie un token si il reussit
+	 * @return token
+	 */
 	@RequestMapping(value="/connect", method=RequestMethod.POST)
 	public String connect(WebRequest request) {
 		String user = request.getParameter("user");

@@ -17,7 +17,7 @@ import user.User;
 import utility.FtpConfig;
 
 /**
- * Classe qui d�finit les m�thodes de communication avec le serveur FTP
+ * Classe qui definit les methodes de communication avec le serveur FTP
  * 
  * 
  * @author Lucas Moura de Oliveira
@@ -33,7 +33,7 @@ public class FtpClient {
 	protected FtpConfig ftpConfig;
 
 	/**
-	 * Initialise le client FTP � parti d'une socket, d'une factory et d'une
+	 * Initialise le client FTP a partir d'une socket, d'une factory et d'une
 	 * configuration.
 	 * 
 	 * @param commandSocket
@@ -380,6 +380,11 @@ public class FtpClient {
 		}
 	}
 
+	/**
+	 * telecharge un dossier sous forme de zip
+	 * @param path du dossier
+	 * @return zip
+	 */
 	public File downloadFolder(String path) {
 		if (!this.isConnected()) {
 			return null;
@@ -399,14 +404,17 @@ public class FtpClient {
 			}
 			dataSocket.closeReaders();
 		}
-		return zip("tmp/" + path.split("/")[path.split("/").length - 1], listget);
+		return zip("tmp/" + path.split("/")[path.split("/").length - 1] + ".zip", listget);
 	}
 
-	public File zip(String path, List<String> listfiles) {
-		return zipIt(path + ".zip", listfiles);
-	}
 
-	public File zipIt(String zipFile, List<String> listfiles) {
+	/**
+	 * zip une liste de fichier (listfiles) dans un zip (path)
+	 * @param path nom du zip(.zip)
+	 * @param listfiles nom des path vers les fichier a inclure dans le zip
+	 * @return un zip
+	 */
+	public File zip(String zipFile, List<String> listfiles) {
 		byte[] buffer = new byte[1024];
 		FileOutputStream fos = null;
 		ZipOutputStream zos = null;
@@ -442,6 +450,11 @@ public class FtpClient {
 		return new File(zipFile);
 	}
 
+	/**
+	 * Genere tous les chemins vers des fichiers d'un dossier ( en FTP )
+	 * @param node path vers un dossier
+	 * @return list de path vers les fichiers du dossier (node)
+	 */
 	public List<String> generateFileListGet(String node) {
 		if (node.length() > 0 && node.endsWith("/")) {
 			node = node.substring(0, node.length() - 1);
@@ -461,7 +474,6 @@ public class FtpClient {
 				filename = ligne.split("; ")[ligne.split("; ").length - 1];
 			}
 			if (type.equals("file")) {
-				System.out.println("generateFileListGet:" + node + "/" + filename);
 				fileList.add(node + "/" + filename);
 			} else {
 				fileList.addAll(generateFileListGet(node + "/" + filename));
@@ -471,11 +483,15 @@ public class FtpClient {
 		return fileList;
 	}
 
+	/**
+	 * Genere tous les chemins vers des fichiers d'un dossier ( en local )
+	 * @param node path vers un dossier
+	 * @return list de path vers les fichiers du dossier (node)
+	 */
 	public List<String> generateFileList(File node) {
 		List<String> fileList = new ArrayList<String>();
 		if (node.isFile())
 			try {
-				System.out.println("generateFileList:" + node.getCanonicalPath());
 				fileList.add(node.getCanonicalPath());
 			} catch (IOException e) {
 			}

@@ -19,6 +19,11 @@ public class Application {
     	SpringApplication.run(Application.class, args);
     }
     
+    /**
+     * Pour supprimer le dossier tmp à chaque lancement de l'appli
+     * @param parent ( dossier à supprimer )
+     * @return si le delete a marché
+     */
     private static boolean recursiveDelete(File parent) {
 		for(File f : parent.listFiles()){
 			if(f.isDirectory()){
