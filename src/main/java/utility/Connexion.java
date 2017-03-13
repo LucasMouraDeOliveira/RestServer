@@ -8,14 +8,14 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 
 /**
- * Classe utilitaire g�rant l'envoi et la r�ception de messages par sockets
+ * Classe utilitaire gérant l'envoi et la réception de messages par sockets
  * 
  * @author Lucas Moura de Oliveira
  */
 public class Connexion {
 	
 	/**
-	 * Envoie un message au format texte � une socket client.
+	 * Envoie un message au format texte à une socket client.
 	 * Si le message est null, rien ne se passe
 	 * 
 	 * @param writer le writer de la socket
@@ -30,11 +30,11 @@ public class Connexion {
 	}
 	
 	/**
-	 * Re�oit un message au format texte depuis une socket client
+	 * Reçoit un message au format texte depuis une socket client
 	 * 
 	 * @param reader le reader de la socket
 	 * 
-	 * @return le message re�u par la socket, null s'il y a eu une erreur lors de la transmission
+	 * @return le message reçu par la socket, null s'il y a eu une erreur lors de la transmission
 	 */
 	public static String read(BufferedReader reader){
 		try {
@@ -49,7 +49,7 @@ public class Connexion {
 
 	/**
 	 * Ecrit un message au format binaire dans une socket client.
-	 * Si le message est null, rien n'est envoy�
+	 * Si le message est null, rien n'est envoyé
 	 * 
 	 * @param writer le writer de la socket
 	 * @param binary un tableau de byte constituant le message
@@ -71,7 +71,7 @@ public class Connexion {
 	 * 
 	 * @param reader le reader de la socket
 	 * 
-	 * @return un tableau de byte correspondant au message envoy� par la socket, null s'il y a eu une erreur de transmission
+	 * @return un tableau de byte correspondant au message envoyé par la socket, null s'il y a eu une erreur de transmission
 	 */
 	public static byte[] readBinary(DataInputStream reader) {
 		byte[] data = new byte[4096];

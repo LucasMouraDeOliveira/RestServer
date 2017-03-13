@@ -14,7 +14,7 @@ import ftp.FtpReply;
 import ftp.FtpRequest;
 
 /**
- * Classe utilitaire de cr�ation d'objets (commandes, readers, writers, ...)
+ * Classe utilitaire de création d'objets (commandes, readers, writers, ...)
  * 
  * @author Lucas Moura de Oliveira
  *
@@ -22,7 +22,7 @@ import ftp.FtpRequest;
 public class FtpFactory {
 
 	/**
-	 * Cr�e une commande USER
+	 * Crée une commande USER
 	 * 
 	 * @param user le login de l'utilisateur
 	 * 
@@ -33,7 +33,7 @@ public class FtpFactory {
 	}
 
 	/**
-	 * Cr�e une commande PASS
+	 * Crée une commande PASS
 	 * 
 	 * @param password le mot de passe de l'utilisateur
 	 * 
@@ -44,7 +44,7 @@ public class FtpFactory {
 	}
 	
 	/**
-	 * Cr�e une commande EPSV (passage en mode passif)
+	 * Crée une commande EPSV (passage en mode passif)
 	 * 
 	 * @return la commande EPSV
 	 */
@@ -53,9 +53,9 @@ public class FtpFactory {
 	}
 
 	/**
-	 * Cr�e une commande RETR (r�cup�ration de fichier)
+	 * Crée une commande RETR (récupération de fichier)
 	 * 
-	 * @param path le chemin d'acc�s au fichier
+	 * @param path le chemin d'accès au fichier
 	 * 
 	 * @return la commande RETR
 	 */
@@ -64,9 +64,9 @@ public class FtpFactory {
 	}
 
 	/**
-	 * Cr�e une commande MLST (listage du contenu d'un dossier)
+	 * Crée une commande MLST (listage du contenu d'un dossier)
 	 * 
-	 * @param path le chemin d'acc�s au dossier
+	 * @param path le chemin d'accès au dossier
 	 * 
 	 * @return la commande MLST
 	 */
@@ -75,24 +75,29 @@ public class FtpFactory {
 	}
 
 	/**
-	 * Cr�e une commande CWD (change le dossier courant)
+	 * Crée une commande CWD (change le dossier courant)
 	 * 
-	 * @param path le chemin d'acc�s � un dossier
+	 * @param path le chemin d'accès à un dossier
 	 * 
 	 * @return la commande CWD
 	 */
 	public FtpRequest buildCwdRequest(String path) {
 		return new FtpRequest("CWD " + path);
 	}
+	
+	/**
+	 * Crée une commande CWD sans argument qui renvoie à la racine du dossier utilisateur
+	 * 
+	 * @return la commande CWD sans argument
+	 */
 	public FtpRequest buildCwdRequest() {
 		return new FtpRequest("CWD");
 	}
 
-
 	/**
-	 * Cr�e une commande RMD (supprime un dossier)
+	 * Crée une commande RMD (supprime un dossier)
 	 * 
-	 * @param path le chemin d'acc�s au dossier
+	 * @param path le chemin d'accès au dossier
 	 * 
 	 * @return la commande RMD
 	 */
@@ -101,9 +106,9 @@ public class FtpFactory {
 	}
 
 	/**
-	 * Cr�e une commande RMFR (renommage : partie 1) 
+	 * Crée une commande RMFR (renommage : partie 1) 
 	 * 
-	 * @param from le chemin d'acc�s au fichier
+	 * @param from le chemin d'accès au fichier
 	 * 
 	 * @return la commande RNFR
 	 */
@@ -112,9 +117,9 @@ public class FtpFactory {
 	}
 
 	/**
-	 * Cr�e une commande RNTO (renommage : partie 2)
+	 * Crée une commande RNTO (renommage : partie 2)
 	 * 
-	 * @param to le nouveau chemin d'acc�s au fichier
+	 * @param to le nouveau chemin d'accès au fichier
 	 * 
 	 * @return la commande RNTO
 	 */
@@ -123,7 +128,7 @@ public class FtpFactory {
 	}
 		
 	/**
-	 * Cr�e une commande STOR (upload un fichier)
+	 * Crée une commande STOR (upload un fichier)
 	 * 
 	 * @param fileName le nom du fichier
 	 * 
@@ -134,9 +139,9 @@ public class FtpFactory {
 	}
 
 	/**
-	 * Cr�e une commande MKD (cr�e un dossier)
+	 * Crée une commande MKD (cr�e un dossier)
 	 * 
-	 * @param path le chemin d'acc�s au dossier
+	 * @param path le chemin d'accès au dossier
 	 * 
 	 * @return la commande MKD
 	 */
@@ -145,7 +150,7 @@ public class FtpFactory {
 	}
 
 	/**
-	 * Cr�e une commande QUIT (coupe la connexion au serveur)
+	 * Crée une commande QUIT (coupe la connexion au serveur)
 	 * 
 	 * @return la commande QUIT
 	 */
@@ -154,7 +159,7 @@ public class FtpFactory {
 	}
 	
 	/**
-	 * Cr�e une SocketAddress
+	 * Crée une SocketAddress
 	 * @param commandAddress l'adresse
 	 * @param commandPort le port
 	 * @return la SocketAddress
@@ -164,18 +169,18 @@ public class FtpFactory {
 	}
 
 	/**
-	 * @return une Socket non connect�e
+	 * @return une Socket non connectée
 	 */
 	public Socket buildEmptySocket() {
 		return new Socket();
 	}
 
 	/**
-	 * R�cup�re et analyse une r�ponse renvoy�e par le serveur FTP
+	 * Récupère et analyse une réponse renvoyée par le serveur FTP
 	 * 
-	 * @param response la r�ponse du serveur FTP
+	 * @param response la réponse du serveur FTP
 	 * 
-	 * @return une r�ponse FTP format�e si le format du message est correcte, null sinon
+	 * @return une réponse FTP formatée si le format du message est correcte, null sinon
 	 */
 	public FtpReply buildResponse(String response) {
 		if(response == null)

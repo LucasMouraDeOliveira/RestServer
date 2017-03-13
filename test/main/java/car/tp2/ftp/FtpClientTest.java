@@ -198,22 +198,12 @@ public class FtpClientTest {
 	
 	@Test
 	public void testSetPassiveFailsReplyIsNot229() throws IOException {
-		FtpRequest userRequest = mock(FtpRequest.class);
-		FtpRequest passwordRequest = mock(FtpRequest.class);
 		FtpRequest setPassiveRequest = mock(FtpRequest.class);
-		FtpReply userReply = mock(FtpReply.class);
-		FtpReply passwordReply = mock(FtpReply.class);
 		FtpReply setPassiveReply = mock(FtpReply.class);
 		when(this.ftpSocket.openSocket(this.commandAddress, this.commandPort)).thenReturn(true);
 		when(this.ftpSocket.readLine()).thenReturn("220 OK");
-		when(this.ftpFactory.buildUserRequest(this.validUser)).thenReturn(userRequest);
-		when(this.ftpFactory.buildPasswordRequest(this.validPassword)).thenReturn(passwordRequest);
 		when(this.ftpFactory.buildSetPassiveRequest()).thenReturn(setPassiveRequest);
-		when(this.ftpSocket.sendAndWaitForReply(userRequest)).thenReturn(userReply);
-		when(this.ftpSocket.sendAndWaitForReply(passwordRequest)).thenReturn(passwordReply);
 		when(this.ftpSocket.sendAndWaitForReply(setPassiveRequest)).thenReturn(setPassiveReply);
-		when(userReply.isOk("331")).thenReturn(true);
-		when(passwordReply.isOk("230")).thenReturn(true);
 		when(setPassiveReply.isOk("229")).thenReturn(false);
 		when(setPassiveReply.getMessage()).thenReturn("Passage en mode passif etendu (|||2021|) ");
 		when(this.ftpConfig.getDataPort()).thenReturn(2021);
@@ -225,22 +215,12 @@ public class FtpClientTest {
 	
 	@Test
 	public void testSetPassiveFailsReplyPortIsNotNumeric() throws IOException {
-		FtpRequest userRequest = mock(FtpRequest.class);
-		FtpRequest passwordRequest = mock(FtpRequest.class);
 		FtpRequest setPassiveRequest = mock(FtpRequest.class);
-		FtpReply userReply = mock(FtpReply.class);
-		FtpReply passwordReply = mock(FtpReply.class);
 		FtpReply setPassiveReply = mock(FtpReply.class);
 		when(this.ftpSocket.openSocket(this.commandAddress, this.commandPort)).thenReturn(true);
 		when(this.ftpSocket.readLine()).thenReturn("220 OK");
-		when(this.ftpFactory.buildUserRequest(this.validUser)).thenReturn(userRequest);
-		when(this.ftpFactory.buildPasswordRequest(this.validPassword)).thenReturn(passwordRequest);
 		when(this.ftpFactory.buildSetPassiveRequest()).thenReturn(setPassiveRequest);
-		when(this.ftpSocket.sendAndWaitForReply(userRequest)).thenReturn(userReply);
-		when(this.ftpSocket.sendAndWaitForReply(passwordRequest)).thenReturn(passwordReply);
 		when(this.ftpSocket.sendAndWaitForReply(setPassiveRequest)).thenReturn(setPassiveReply);
-		when(userReply.isOk("331")).thenReturn(true);
-		when(passwordReply.isOk("230")).thenReturn(true);
 		when(setPassiveReply.isOk("229")).thenReturn(true);
 		when(setPassiveReply.getMessage()).thenReturn("Passage en mode passif etendu (|||bad_format|) ");
 		when(this.ftpConfig.getDataPort()).thenReturn(2021);

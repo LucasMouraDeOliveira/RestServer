@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * Classe récupérant le param�trage du fichier de configuration (configuration.properties) 
+ * Classe récupérant le paramétrage du fichier de configuration (configuration.properties) 
  * situé à la racine du projet.
  * 
- * Le fichier de configuration permet de connnaitre l'adrese et les num�ros de port pour se connecter au serveur FTP
+ * Le fichier de configuration permet de connnaitre l'adresse et les numéros de port pour se connecter au serveur FTP
  *
  * @author Lucas Moura de Oliveira
  *
@@ -32,9 +32,9 @@ public class FtpConfig {
 	}
 	
 	/**
-	 * Charge les propriétés du fichier de configuration (Adresse, port de commande et port de donn"es)
+	 * Charge les propriétés du fichier de configuration (Adresse, port de commande et port de données)
 	 * 
-	 * @return vrai si le chargement du fichier de configuration a r�ussit, faux sinon
+	 * @return vrai si le chargement du fichier de configuration a réussit, faux sinon
 	 */
 	private boolean loadProperties() {
 		Properties properties = new Properties();
@@ -65,28 +65,31 @@ public class FtpConfig {
 	}
 	
 	/**
-	 * @return le num�ro du port de commande
+	 * @return le numéro du port de commande
 	 */
 	public int getCommandPort() {
 		return this.commandPort;
 	}
 	
 	/**
-	 * @return le num�ro du port de donn�es
+	 * @return le numéro du port de données
 	 */
 	public int getDataPort() {
 		return this.dataPort;
 	}
 	
 	/**
-	 * Met � jour le num�ro du port de donn�es
+	 * Met à jour le numéro du port de données
 	 * 
-	 * @param port le nouveau num�ro de port
+	 * @param port le nouveau numéro de port
 	 */
 	public void setConfiguredDataPort(int port) {
 		this.dataPort = port;
 	}
 	
+	/**
+	 * @return vrai si le fichier de configuration a été chargé avec succès
+	 */
 	public boolean loadSucces() {
 		return this.loadSucces();
 	}

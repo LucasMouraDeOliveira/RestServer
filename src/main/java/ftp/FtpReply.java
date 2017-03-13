@@ -1,7 +1,7 @@
 package ftp;
 
 /**
- * Classe encapsulant une r�ponse du serveur FTP
+ * Classe encapsulant une réponse du serveur FTP
  * 
  * @author Lucas Moura de Oliveira
  *
@@ -13,7 +13,7 @@ public class FtpReply {
 	protected String message;
 
 	/**
-	 * Cr�e une ftpReply � partir d'un code de retour et un message
+	 * Crée une ftpReply à partir d'un code de retour et un message
 	 * 
 	 * @param code le code de retour
 	 * @param message le message
@@ -24,11 +24,11 @@ public class FtpReply {
 	}
 
 	/**
-	 * Retourne vrai si le code de retour corresponds � celui qui est attendu
+	 * Retourne vrai si le code de retour corresponds à celui qui est attendu
 	 * 
 	 * @param expectedCode le code de retour attendu
 	 * 
-	 * @return vrai si la chaine du code de retour attendu est la m�me que celle du code de retour effectif
+	 * @return vrai si la chaine du code de retour attendu est la même que celle du code de retour effectif
 	 */
 	public boolean isOk(String expectedCode) {
 		return expectedCode.equals(code);

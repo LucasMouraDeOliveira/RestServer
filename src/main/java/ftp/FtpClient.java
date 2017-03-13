@@ -17,7 +17,7 @@ import user.User;
 import utility.FtpConfig;
 
 /**
- * Classe qui d�finit les m�thodes de communication avec le serveur FTP
+ * Classe qui définit les méthodes de communication avec le serveur FTP
  * 
  * 
  * @author Lucas Moura de Oliveira
@@ -33,14 +33,14 @@ public class FtpClient {
 	protected FtpConfig ftpConfig;
 
 	/**
-	 * Initialise le client FTP � parti d'une socket, d'une factory et d'une
+	 * Initialise le client FTP à parti d'une socket, d'une factory et d'une
 	 * configuration.
 	 * 
 	 * @param commandSocket
 	 *            un objet permettant la commmunication avec le serveur FTP via
 	 *            sa socket de commande
 	 * @param ftpFactory
-	 *            factory de requetes/r�ponses
+	 *            factory de requetes/réponses
 	 * @param ftpConfig
 	 *            objet contenant la configuration du serveur FTP (adresse et
 	 *            ports)
@@ -52,7 +52,7 @@ public class FtpClient {
 	}
 
 	/**
-	 * Initialise le client FTP. R�cup�re l'adresse du serveur FTP dans le
+	 * Initialise le client FTP. Récupère l'adresse du serveur FTP dans le
 	 * fichier de configuration et tente de se connecter sur le port de
 	 * commande.
 	 * 
@@ -71,7 +71,7 @@ public class FtpClient {
 
 	/**
 	 * Tente d'ouvrir la connexion avec le serveur FTP sur un port et renvoie
-	 * vrai si la connexion r�ussit
+	 * vrai si la connexion réussit
 	 * 
 	 * @param address
 	 *            l'adresse du serveur
@@ -103,7 +103,7 @@ public class FtpClient {
 	}
 
 	/**
-	 * @return vrai si l'utilisateur est connect� et authentifi� sur le serveur
+	 * @return vrai si l'utilisateur est connecté et authentifié sur le serveur
 	 *         FTP
 	 */
 	public boolean isConnected() {
@@ -111,17 +111,17 @@ public class FtpClient {
 	}
 
 	/**
-	 * Connecte l'utilisateur au serveur FTP. Si la connexion r�ussie, l'�tat du
-	 * client passe � 'connect�'. Si la connexion �choue, l'�tat du client reste
-	 * � 'd�connect�'
+	 * Connecte l'utilisateur au serveur FTP. Si la connexion réussie, l'état du
+	 * client passe à 'connecté'. Si la connexion échoue, l'état du client reste
+	 * à 'déconnecté'
 	 * 
 	 * @param user
-	 *            le login de l'utilisateur, sous forme de chaine de caract�res
+	 *            le login de l'utilisateur, sous forme de chaine de caractères
 	 * @param password
-	 *            le mot de passe non crypt� de l'utilisateur, sous forme de
-	 *            chaine de caract�res
+	 *            le mot de passe non crypté de l'utilisateur, sous forme de
+	 *            chaine de caractères
 	 * 
-	 * @return vrai si l'authentification a r�ussi, faux sinon
+	 * @return vrai si l'authentification a réussi, faux sinon
 	 */
 	public boolean connect(String user, String password) {
 		// Si la socket n'est pas ouverte, on ne peut pas se connecter -> erreur
@@ -146,12 +146,12 @@ public class FtpClient {
 	}
 
 	/**
-	 * T�l�charge un fichier depuis le serveur FTP
+	 * Télécharge un fichier depuis le serveur FTP
 	 * 
 	 * @param path
-	 *            le chemin d'acc�s au fichier sur le serveur
+	 *            le chemin d'accès au fichier sur le serveur
 	 * 
-	 * @return le fichier si le t�l�chargement a r�ussi, faux sinon
+	 * @return le fichier si le téléchargement a réussi, faux sinon
 	 */
 	public File download(String path) {
 		if (!this.isConnected()) {
@@ -178,12 +178,12 @@ public class FtpClient {
 	 * Upload un fichier sur le serveur FTP
 	 * 
 	 * @param inputStream
-	 *            le flux de donn�es repr�sentant le fichier
+	 *            le flux de données représentant le fichier
 	 * @param fileName
 	 *            le nom du fichier sur le serveur FTP
 	 * @param path
-	 *            le chemin d'acc�s au fichier sur le serveur FTP
-	 * @return vrai si l'upload du fichier a r�ussi, faux sinon
+	 *            le chemin d'accès au fichier sur le serveur FTP
+	 * @return vrai si l'upload du fichier a réussi, faux sinon
 	 */
 	public boolean upload(InputStream inputStream, String fileName, String path) {
 		if (!this.isConnected()) {
@@ -206,13 +206,13 @@ public class FtpClient {
 	}
 
 	/**
-	 * Liste les fichiers d'un r�pertoire sur le serveur FTP
+	 * Liste les fichiers d'un répertoire sur le serveur FTP
 	 * 
 	 * @param path
-	 *            le chemin d'acc�s au r�pertoire
+	 *            le chemin d'accès au répertoire
 	 * 
 	 * @return une liste de String contenant diverses informations (nom, date de
-	 *         modif, type, ...) sur les fichiers contenus dans le dossier ou null si la commande a �chou�
+	 *         modif, type, ...) sur les fichiers contenus dans le dossier ou null si la commande a échoué
 	 * 
 	 */
 	public List<String> list(String path) {
@@ -248,7 +248,7 @@ public class FtpClient {
 	 * @param user
 	 *            le login de l'utilisateur
 	 * 
-	 * @return une r�ponse FTP si la commande a r�ussi, null sinon
+	 * @return une réponse FTP si la commande a réussi, null sinon
 	 */
 	public FtpReply sendUserCommand(String user) {
 		return this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildUserRequest(user));
@@ -260,7 +260,7 @@ public class FtpClient {
 	 * @param password
 	 *            le mot de passe de l'utilisateur
 	 * 
-	 * @return une r�ponse FTP si la commande a r�ussi, null sinon
+	 * @return une réponse FTP si la commande a réussi, null sinon
 	 */
 	public FtpReply sendPasswordCommand(String password) {
 		return this.commandSocket.sendAndWaitForReply(this.ftpFactory.buildPasswordRequest(password));
@@ -269,7 +269,7 @@ public class FtpClient {
 	/**
 	 * Demande au serveur de passer la connexion en mode passif
 	 * 
-	 * @return vrai si le passage en mode passif a r�ussi, faux sinon
+	 * @return vrai si le passage en mode passif a réussi, faux sinon
 	 */
 	public boolean setPassive() {
 		if (!this.isConnected()) {
@@ -290,19 +290,19 @@ public class FtpClient {
 	}
 
 	/**
-	 * Met � jour le num�ro de port pour la connexion au serveur FTP sur la
-	 * socket de donn�es
+	 * Met à jour le numéro de port pour la connexion au serveur FTP sur la
+	 * socket de données
 	 * 
 	 * @param dataPort
-	 *            le nouveau num�ro de port
+	 *            le nouveau numéro de port
 	 */
 	public void setDataPort(int dataPort) {
 		this.getConfig().setConfiguredDataPort(dataPort);
 	}
 
 	/**
-	 * @return le num�ro de port pour la connexion au serveur FTP sur la socket
-	 *         de donn�es
+	 * @return le numéro de port pour la connexion au serveur FTP sur la socket
+	 *         de données
 	 */
 	public int getDataPort() {
 		return this.getConfig().getDataPort();
@@ -319,9 +319,9 @@ public class FtpClient {
 	 * Supprime un fichier sur le serveur FTP
 	 * 
 	 * @param path
-	 *            le chemin d'acc�s au fichier
+	 *            le chemin d'accès au fichier
 	 * 
-	 * @return vrai si la suppression a r�ussi, faux sinon
+	 * @return vrai si la suppression a réussi, faux sinon
 	 */
 	public boolean delete(String path) {
 		if (!this.isConnected()) {
@@ -340,7 +340,7 @@ public class FtpClient {
 	 * @param to
 	 *            le nouveau nom du fichier
 	 * 
-	 * @return vrai si le renommage a r�ussi, faux sinon
+	 * @return vrai si le renommage a réussi, faux sinon
 	 */
 	public boolean rename(String from, String to) {
 		if (!this.isConnected())
@@ -354,12 +354,12 @@ public class FtpClient {
 	}
 
 	/**
-	 * Cr�e un dossier sur le serveur FTP
+	 * Crée un dossier sur le serveur FTP
 	 * 
 	 * @param path
-	 *            le chemin d'acc�s au fichier
+	 *            le chemin d'accès au fichier
 	 * 
-	 * @return vrai si la cr�ation de dossier a r�ussi, faux sinon
+	 * @return vrai si la création de dossier a réussi, faux sinon
 	 */
 	public boolean mkdir(String path) {
 		if (!this.isConnected())

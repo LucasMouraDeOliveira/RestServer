@@ -8,6 +8,13 @@ import factory.FtpFactory;
 import ftp.FtpReply;
 import ftp.FtpRequest;
 
+/**
+ * Classe gérant la communication avec le serveur FTP via sa socket de commande.
+ * La classe définit des flux d'entrées et de sorties et implémente les méthodes de lecture et écriture dans ces flux.
+ * 
+ * @author Lucas Moura de Oliveira
+ *
+ */
 public class FtpCommandSocket extends FtpSocket implements ICommandSocket{
 	
 	protected BufferedReader reader;

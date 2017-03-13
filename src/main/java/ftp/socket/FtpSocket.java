@@ -6,9 +6,9 @@ import java.net.Socket;
 import factory.FtpFactory;
 
 /**
- * Classe abstraites d�finissant les m�thodes de communication avec le serveur FTP.
- * Cette classe est impl�ment�e par les classes FtpCommandSocket et FtpDataSocket
- * qui se sp�cialisent chacune dans la communication avec un des deux sockets du protocole FTP
+ * Classe abstraites définissant les méthodes de communication avec le serveur FTP.
+ * Cette classe est implémentée par les classes FtpCommandSocket et FtpDataSocket
+ * qui se spécialisent chacune dans la communication avec un des deux sockets du protocole FTP
  * 
  * @author Lucas Moura de Oliveira
  *
@@ -20,9 +20,9 @@ public abstract class FtpSocket {
 	protected Socket socket;
 		
 	/**
-	 * Cr�e une FTPSocket
+	 * Crée une FTPSocket
 	 * 
-	 * @param ftpFactory une factory g�rant la cr�ation de requetes, sockets et readers/writers
+	 * @param ftpFactory une factory gérant la cr�ation de requetes, sockets et readers/writers
 	 */
 	public FtpSocket(FtpFactory ftpFactory){
 		this.ftpFactory = ftpFactory;
@@ -33,9 +33,9 @@ public abstract class FtpSocket {
 	 * Tente d'ouvrir la connexion avec le serveur FTP
 	 * 
 	 * @param address l'adresse du serveur FTP
-	 * @param port le port de connexio � la socket de commande du serveur FTP
+	 * @param port le port de connexion de la socket de commande du serveur FTP
 	 * 
-	 * @return vrai si la connexion a pu �tre �tablie, faux s'il y a eu une erreur
+	 * @return vrai si la connexion a pu être établie, faux s'il y a eu une erreur
 	 */
 	public boolean openSocket(String address, int port) {
 		try {
@@ -48,7 +48,7 @@ public abstract class FtpSocket {
 	}
 	
 	/**
-	 * Cr�e et ouvre les readers et writers de la socket
+	 * Crée et ouvre les readers et writers de la socket
 	 * 
 	 * @throws IOException s'il y a eu une erreur lors de l'ouverture d'un des flux
 	 */
