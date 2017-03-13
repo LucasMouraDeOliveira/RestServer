@@ -6,7 +6,7 @@ $('document').ready(function(){
         var path = $('#path').val();
         $.ajax({
 	        type: "POST",
-		    url: '/rest/tp2/file/upload/'+path + token,
+		    url: '/file/upload' + token + "&path="+path,
             contentType: false, // obligatoire pour de l'upload
             processData: false, // obligatoire pour de l'upload
             data: new FormData($form[0]),
@@ -14,7 +14,7 @@ $('document').ready(function(){
             	location.reload();
             },
             error: function(){
-            	window.location.replace("/rest/tp2/user");
+            	window.location.replace("/user");
             }
         });
 	});
@@ -24,13 +24,13 @@ $('document').ready(function(){
         var $form = $( this );
         $.ajax({
             type: "PUT",
-    	    url: '/rest/tp2/file/rename' + token,
+    	    url: '/file/rename' + token,
     	    data: $form.serialize(),
             success: function (response) {
             	location.reload();
             },
             error: function(){
-            	window.location.replace("/rest/tp2/user");
+            	window.location.replace("/user");
             }
         });
 	});
@@ -42,12 +42,12 @@ $('document').ready(function(){
         var path = $('#path').val();
         $.ajax({
 	        type: "POST",
-		    url: '/rest/tp2/file/mkdir/'+ path + "/" + filename + token,
+		    url: '/folder/mkdir' + token + "&path=" + (path == "" ? "" : path+"/") + filename,
             success: function (response) {
             	location.reload();
             },
             error: function(){
-            	window.location.replace("/rest/tp2/user");
+            	window.location.replace("/user");
             }
         });
 	});
@@ -55,11 +55,11 @@ $('document').ready(function(){
 		e.preventDefault();
         var $form = $( this );
         $.ajax({
-	        type: "GET",
-		    url: '/rest/tp2/user/connect',
+	        type: "POST",
+		    url: '/user/connect',
     	    data: $form.serialize(),
             success: function (response,statut) {
-            	window.location.replace("/rest/tp2/folder/?token="+response);
+            	window.location.replace("/folder?path=&token="+response);
             },
             error : function(){
             	location.reload();
@@ -73,12 +73,12 @@ function supprime(filename){
     var path = $('#path').val();
 	$.ajax({
         type: "DELETE",
-	    url: '/rest/tp2/file/'+ path + "/" + filename+ token,
+	    url: '/file/' + token + "&path=" + (path == "" ? "" : path+"/") + filename,
         success: function (response) {
         	location.reload();
         },
         error: function(){
-        	window.location.replace("/rest/tp2/user");
+        	window.location.replace("/user");
         }
     });
 }
