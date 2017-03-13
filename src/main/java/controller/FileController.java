@@ -26,6 +26,12 @@ import user.UserManagment;
 @RequestMapping("/file")
 public class FileController {
 
+	/**
+	 * Route pour telecharger un fichier
+	 * @param response (le fichier telecharger)
+	 * @param path du fichier
+	 * @param token pour se connecter
+	 */
 	@RequestMapping(value = "/download", params = { "path", "token" }, method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@ResponseBody
 	public void download(HttpServletResponse response, @RequestParam(value = "path") String path, @RequestParam(value = "token") String token) {
@@ -55,7 +61,13 @@ public class FileController {
 				/* on ne retourne rien */}
 		}
 	}
-
+	
+	/**
+	 * Route pour upload un fichier
+	 * @param file (le fichier)
+	 * @param path ou mettre le fichier
+	 * @param token pour se connecter
+	 */
 	@RequestMapping(value="/upload", method = RequestMethod.POST, params = { "path", "token" })
 	public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam(value = "path") String path, @RequestParam(value = "token") String token) {
 		// Vérification connexion
@@ -75,6 +87,11 @@ public class FileController {
 		return "200";
 	}
 
+	/**
+	 * Route pour rename(move) un fichier ou dossier
+	 * @param request avec les 2 path (from et to) pour savoir ou est le fichier et ou il faut le mettre
+	 * @param token pour se connecter
+	 */
 	@RequestMapping(value = "/rename", params = { "token" }, method = RequestMethod.PUT)
 	public String renameFile(WebRequest request, @RequestParam("token") String token) {
 		// Vérification connexion
@@ -95,6 +112,11 @@ public class FileController {
 		}
 	}
 
+	/**
+	 * Route pour supprimer un fichier ou dossier
+	 * @param path du fichier/dossier
+	 * @param token pour se connecter
+	 */
 	@RequestMapping(params = { "path", "token" }, method = RequestMethod.DELETE)
 	public String deleteFile(@RequestParam("path") String path, @RequestParam("token") String token) {
 		// Vérification connexion

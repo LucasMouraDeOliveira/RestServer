@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/js")
 public class JsController {
 	
+	/**
+	 * Route pour recupere les fichier js
+	 * @return JS FILE
+	 */
 	@RequestMapping(value="/{path:.+}", method=RequestMethod.GET)
 	@ResponseBody 
 	public FileSystemResource getJs(@PathVariable("path") String path) {
