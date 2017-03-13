@@ -15,11 +15,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import car.tp2.factory.FtpFactory;
-import car.tp2.ftp.FtpException;
-import car.tp2.ftp.FtpReply;
-import car.tp2.ftp.FtpRequest;
-import car.tp2.ftp.socket.FtpCommandSocket;
+import factory.FtpFactory;
+import ftp.FtpReply;
+import ftp.FtpRequest;
+import ftp.socket.FtpCommandSocket;
 
 public class FtpCommandSocketTest extends FtpSocketTest{
 	
@@ -57,14 +56,14 @@ public class FtpCommandSocketTest extends FtpSocketTest{
 	}
 	
 	@Override
-	public void testOpenSocketSucceeds() throws IOException, FtpException {
+	public void testOpenSocketSucceeds() throws IOException {
 		FtpCommandSocket commandSocket = new FtpCommandSocket(this.ftpFactory);
 		Assert.assertTrue(commandSocket.openSocket(this.commandAddress, this.commandPort));
 		verify(this.socket).connect(this.address);
 	}
 
 	@Override
-	public void testOpenSocketFails() throws IOException, FtpException {
+	public void testOpenSocketFails() throws IOException {
 		FtpCommandSocket commandSocket = new FtpCommandSocket(this.ftpFactory);
 		doThrow(new IOException()).when(this.socket).connect(this.address);
 		Assert.assertFalse(commandSocket.openSocket(this.commandAddress, this.commandPort));
@@ -89,7 +88,7 @@ public class FtpCommandSocketTest extends FtpSocketTest{
 	}
 
 	@Override
-	public void testCloseSocket() throws IOException, FtpException {
+	public void testCloseSocket() throws IOException {
 		FtpCommandSocket commandSocket = new FtpCommandSocket(this.ftpFactory);
 		commandSocket.openSocket(this.commandAddress, this.commandPort);
 		commandSocket.close();
@@ -97,7 +96,7 @@ public class FtpCommandSocketTest extends FtpSocketTest{
 	}
 	
 	@Test
-	public void readLineSucceeds() throws IOException, FtpException {
+	public void readLineSucceeds() throws IOException {
 		when(this.reader.readLine()).thenReturn("200 Success");
 		FtpCommandSocket commandSocket = new FtpCommandSocket(this.ftpFactory);
 		commandSocket.openSocket(this.commandAddress, this.commandPort);
@@ -106,7 +105,7 @@ public class FtpCommandSocketTest extends FtpSocketTest{
 	}
 	
 	@Test
-	public void testSendRequest() throws IOException, FtpException{
+	public void testSendRequest() throws IOException{
 		when(this.request.getText()).thenReturn("test");
 		FtpCommandSocket commandSocket = new FtpCommandSocket(this.ftpFactory);
 		commandSocket.openSocket(this.commandAddress, this.commandPort);
@@ -116,7 +115,7 @@ public class FtpCommandSocketTest extends FtpSocketTest{
 	}
 	
 	@Test
-	public void testSendAndWaitForReply() throws IOException, FtpException {
+	public void testSendAndWaitForReply() throws IOException {
 		when(this.reader.readLine()).thenReturn("200 Success");
 		when(this.request.getText()).thenReturn("test");
 		when(this.ftpFactory.buildResponse(this.reader.readLine())).thenReturn(this.reply);
@@ -133,13 +132,10 @@ public class FtpCommandSocketTest extends FtpSocketTest{
 		when(this.reader.readLine()).thenThrow(new IOException());
 		when(this.request.getText()).thenReturn("test");
 		FtpCommandSocket commandSocket = new FtpCommandSocket(this.ftpFactory);
-		try {
-			commandSocket.openSocket(this.commandAddress, this.commandPort);
-			commandSocket.sendAndWaitForReply(this.request);
-		} catch (FtpException e) {
-			verify(this.writer).write("test\n");
-			verify(this.writer).flush();
-		}
+		commandSocket.openSocket(this.commandAddress, this.commandPort);
+		commandSocket.sendAndWaitForReply(this.request);
+		verify(this.writer).write("test\n");
+		verify(this.writer).flush();
 	}
 
 }

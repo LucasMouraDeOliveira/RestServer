@@ -16,9 +16,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import car.tp2.factory.FtpFactory;
-import car.tp2.ftp.FtpException;
-import car.tp2.ftp.socket.FtpDataSocket;
+import factory.FtpFactory;
+import ftp.socket.FtpDataSocket;
 
 public class FtpDataSocketTest extends FtpSocketTest{
 	
@@ -54,14 +53,14 @@ public class FtpDataSocketTest extends FtpSocketTest{
 	}
 
 	@Override
-	public void testOpenSocketSucceeds() throws IOException, FtpException {
+	public void testOpenSocketSucceeds() throws IOException {
 		FtpDataSocket dataSocket = new FtpDataSocket(this.ftpFactory);
 		Assert.assertTrue(dataSocket.openSocket(this.dataAddress, this.dataPort));
 		verify(this.socket).connect(this.address);
 	}
 
 	@Override
-	public void testOpenSocketFails() throws IOException, FtpException {
+	public void testOpenSocketFails() throws IOException {
 		FtpDataSocket dataSocket = new FtpDataSocket(this.ftpFactory);
 		doThrow(new IOException()).when(this.socket).connect(this.address);
 		Assert.assertFalse(dataSocket.openSocket(this.dataAddress, this.dataPort));
@@ -86,7 +85,7 @@ public class FtpDataSocketTest extends FtpSocketTest{
 	}
 
 	@Override
-	public void testCloseSocket() throws IOException, FtpException {
+	public void testCloseSocket() throws IOException {
 		FtpDataSocket dataSocket = new FtpDataSocket(this.ftpFactory);
 		dataSocket.openSocket(this.dataAddress, this.dataPort);
 		dataSocket.close();
@@ -94,7 +93,7 @@ public class FtpDataSocketTest extends FtpSocketTest{
 	}
 	
 	@Test
-	public void readLine() throws IOException, FtpException {
+	public void readLine() throws IOException {
 		when(this.reader2.readLine()).thenReturn("test");
 		FtpDataSocket dataSocket = new FtpDataSocket(this.ftpFactory);
 		dataSocket.openSocket(this.dataAddress, this.dataPort);
