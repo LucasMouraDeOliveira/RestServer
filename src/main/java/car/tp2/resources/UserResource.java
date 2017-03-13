@@ -23,7 +23,7 @@ public class UserResource {
 	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public Response getUserFrom() {
+	public Response getUserForm() {
 		HtmlFactory htmlFactory = new HtmlFactory();
 		String html = htmlFactory.buildFormUser();
 		return Response.ok(html).build();
@@ -44,11 +44,9 @@ public class UserResource {
 			client.close();
 			return Response.ok(UserManagment.getInstance().addUser(user, mdp)).build();
 		} catch (FtpException | IOException e) {
-			try {
-				client.close();
-			} catch (IOException e1) {
-			}
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		} finally {
+			client.close();
 		}
 	}
 }

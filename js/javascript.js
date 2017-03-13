@@ -12,9 +12,12 @@ $('document').ready(function(){
             data: new FormData($form[0]),
             success: function (response) {
             	location.reload();
+            },
+            error: function(){
+            	window.location.replace("/rest/tp2/user");
             }
         });
-	})
+	});
 	$('.renamefile').on('submit', function (e) {
         e.preventDefault();
         var token = $('#token').val();
@@ -25,9 +28,12 @@ $('document').ready(function(){
     	    data: $form.serialize(),
             success: function (response) {
             	location.reload();
+            },
+            error: function(){
+            	window.location.replace("/rest/tp2/user");
             }
         });
-	})
+	});
 	
 	$('#createfile').on('submit', function (e) {
 		e.preventDefault();
@@ -39,9 +45,12 @@ $('document').ready(function(){
 		    url: '/rest/tp2/file/mkdir/'+ path + "/" + filename + token,
             success: function (response) {
             	location.reload();
+            },
+            error: function(){
+            	window.location.replace("/rest/tp2/user");
             }
         });
-	})
+	});
 	$('#connectuser').on('submit', function (e) {
 		e.preventDefault();
         var $form = $( this );
@@ -56,8 +65,7 @@ $('document').ready(function(){
             	location.reload();
             }
         });
-	})
-	
+	});
 });
 
 function supprime(filename){
@@ -68,6 +76,9 @@ function supprime(filename){
 	    url: '/rest/tp2/file/'+ path + "/" + filename+ token,
         success: function (response) {
         	location.reload();
+        },
+        error: function(){
+        	window.location.replace("/rest/tp2/user");
         }
     });
 }

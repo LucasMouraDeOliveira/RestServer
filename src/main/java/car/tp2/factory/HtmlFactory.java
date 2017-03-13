@@ -38,7 +38,7 @@ public class HtmlFactory {
 					html+="<li id=\""+i+"\"><a href='/rest/tp2/file/"+path+"/"+filename+this.token+"'>"+filename+"</a> "+deletefile(filename)+renamefilebtn(i)+"</li>\n";
 					html+=renamefile(path,filename,i);
 				} else {
-					html+="<li  id=\""+i+"\">D: <a href='/rest/tp2/folder/"+(path.isEmpty()?"":path+"/")+filename+this.token+"'>"+filename+"</a>"+deletefile(filename)+renamefilebtn(i)+"</li>\n";
+					html+="<li  id=\""+i+"\">D: <a href='/rest/tp2/folder/"+(path.isEmpty()?"":path+"/")+filename+this.token+"'>"+filename+"</a>"+deletefile(filename)+renamefilebtn(i)+downloadDirbtn(path,filename)+"</li>\n";
 					html+=renamefile(path,filename,i);
 				}
 			}
@@ -93,6 +93,11 @@ public class HtmlFactory {
 	
 	public String renamefilebtn(int id){
 		String html = "<button onclick=\"showrename('"+id+"')\">renommer</button>";
+		return html;
+	}
+	
+	public String downloadDirbtn(String path,String filename){
+		String html = "<input value='telecharger' type='button' onclick=\"window.location='/rest/tp2/folder/download/"+(path.isEmpty()?"":path+"/")+filename+this.token+"'\"/>";
 		return html;
 	}
 	

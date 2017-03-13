@@ -84,6 +84,10 @@ public class FtpFactory {
 	public FtpRequest buildCwdRequest(String path) {
 		return new FtpRequest("CWD " + path);
 	}
+	public FtpRequest buildCwdRequest() {
+		return new FtpRequest("CWD");
+	}
+
 
 	/**
 	 * Crée une commande RMD (supprime un dossier)

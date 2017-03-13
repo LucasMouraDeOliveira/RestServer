@@ -22,6 +22,8 @@ import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 
 import car.tp2.ftp.FtpClient;
 import car.tp2.ftp.FtpException;
+import car.tp2.user.User;
+import car.tp2.user.UserManagment;
 
 @Path("/file")
 public class FileResource {
@@ -30,11 +32,14 @@ public class FileResource {
 	@Path("/{path : .*}")
 	@Produces("application/octet-stream")
 	public Response getFile(@PathParam("path") String path,@QueryParam("token") String token) {
+		FtpClient client = null;
+		User user = UserManagment.getInstance().getUser(token);
+		if(user == null)
+			return Response.status(Response.Status.FORBIDDEN).build();
 		try {
-			FtpClient client = new FtpClient(token);
+			client = new FtpClient(user);
 			File file = null;
 			file = client.download(path);
-			client.close();
 			if(file == null){
 				return Response.status(Response.Status.NOT_FOUND).build();
 			} else {
@@ -45,52 +50,66 @@ public class FileResource {
 			}
 		} catch (FtpException | IOException e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}finally {
+			client.close();
 		}
 	}
 	
 	@POST
 	@Path("/mkdir/{path : .*}")
 	public Response createDirectory(@PathParam("path") String path,@QueryParam("token") String token){
+		FtpClient client = null;
+		User user = UserManagment.getInstance().getUser(token);
+		if(user == null)
+			return Response.status(Response.Status.FORBIDDEN).build();
 		try {
-			FtpClient client = new FtpClient(token);
+			client = new FtpClient(user);
 			client.mkdir(path);
-			client.close();
 			return Response.ok().build();
 		} catch (IOException | FtpException e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-		} 
+		} finally {
+			client.close();
+		}
 	}
 	
 	@POST
 	@Path("/upload/{path : .*}")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response postFile(MultipartBody body, @PathParam("path") String path,@QueryParam("token") String token){
+		User user = UserManagment.getInstance().getUser(token);
+		if(user == null)
+			return Response.status(Response.Status.FORBIDDEN).build();
+		FtpClient client = null;
 		for(Attachment attachment : body.getAllAttachments()){
 			try {
+				client = new FtpClient(user);
 				InputStream inputStream = attachment.getDataHandler().getInputStream();
 				String fileName = attachment.getDataHandler().getName();
-				FtpClient client = new FtpClient(token);
 				client.upload(inputStream, fileName, path);
-				client.close();
 			} catch (IOException | FtpException e) {
 				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 			}
 		}
+		client.close();
 		return Response.ok().build();
 	}
 	
 	@PUT
 	@Path("/rename")
 	public Response renameFile(@FormParam("from") String from,@FormParam("to") String to,@QueryParam("token") String token){
-		System.out.println("rename " +from+" "+ to);
-		FtpClient client;
+		FtpClient client = null;
+		User user = UserManagment.getInstance().getUser(token);
+		if(user == null)
+			return Response.status(Response.Status.FORBIDDEN).build();
 		try {
-			client = new FtpClient(token);
+			client = new FtpClient(user);
 			client.rename(from,to);
-			client.close();
 			return Response.ok().build();
 		} catch (IOException | FtpException e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}finally {
+			client.close();
 		}
 	}
 	
@@ -98,13 +117,18 @@ public class FileResource {
 	@Path("/{path : .*}")
 	@Produces("application/octet-stream")
 	public Response deleteFile(@PathParam("path") String path,@QueryParam("token") String token) {
+		FtpClient client = null;
+		User user = UserManagment.getInstance().getUser(token);
+		if(user == null)
+			return Response.status(Response.Status.FORBIDDEN).build();
 		try {
-			FtpClient client = new FtpClient(token);
+			client = new FtpClient(user);
 			client.delete(path);
-			client.close();
 			return Response.ok().build();
 		} catch (FtpException | IOException e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}finally {
+			client.close();
 		}
 	}
 	

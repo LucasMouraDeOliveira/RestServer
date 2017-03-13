@@ -55,7 +55,7 @@ public class FtpDataSocket extends FtpSocket {
 	 */
 	public File readFileFromReader(String fileName) throws FtpException{
 		File tmpFile = createTemporaryFile(fileName);
-		OutputStream fileStream;
+		OutputStream fileStream = null;
 		try {
 			fileStream = new FileOutputStream(tmpFile);
 		} catch (FileNotFoundException e) {
@@ -65,6 +65,11 @@ public class FtpDataSocket extends FtpSocket {
 		while((data = readDataByte(this.reader)) != null){
 			if(!writeDataInFile(fileStream, data))
 				throw new FtpException("Erreur d'écriture dans le fichier " + tmpFile.getName());
+		}
+		try {
+			fileStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return tmpFile;
 	}
@@ -95,6 +100,9 @@ public class FtpDataSocket extends FtpSocket {
 	 */
 	private File createTemporaryFile(String fileName) {
 		File tmpFolder = new File("tmp");
+		if(fileName.lastIndexOf("/") != -1)
+			tmpFolder = new File("tmp/" +fileName.substring(0,fileName.lastIndexOf("/")));
+		
 		if(!tmpFolder.exists()){
 			tmpFolder.mkdirs();
 		}
